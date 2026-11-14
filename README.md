@@ -84,27 +84,50 @@ Welfare information that's wrong is worse than none. HaqSetu is built around tha
 - **Official links only** — HaqSetu never processes applications and never asks for money.
 - **Kept current** — schemes live in [`data/schemes.js`](data/schemes.js). New and updated schemes ship with each deploy; records that a reviewer has edited are never overwritten. A weekly research job checks official sources (PIB, myScheme, ministry and state portals) for launches, changes and closures.
 
-## 🏗️ How it's built
+## 🏗️ System architecture
 
+```mermaid
+flowchart LR
+    subgraph Client["📱 Citizen's device"]
+        B["Browser<br/>EJS pages + React voice UI"]
+        WS["Web Speech API"]
+    end
+    subgraph Server["☁️ HaqSetu server"]
+        N["Node.js + Express<br/>web · auth · admin"]
+        JE["Eligibility engine (JS)"]
+        V["FastAPI voice service"]
+        PE["Eligibility engine (Python)"]
+        DB[("PostgreSQL")]
+    end
+    subgraph Ext["🌐 Optional services"]
+        AI4B["AI4Bharat<br/>ASR · translation · TTS"]
+        LLM["LLM provider"]
+        GOV["Official government portals"]
+    end
+    B <-->|HTTPS| N
+    B --- WS
+    N --> JE
+    N <-->|"/voice-api"| V
+    V --> PE
+    N <--> DB
+    V -->|read-only| DB
+    V -.-> AI4B
+    V -.-> LLM
+    B -->|apply links| GOV
 ```
-                 ┌──────────────────────────────────────────────────┐
-  Browser  ───▶  │  Node.js + Express  (EJS pages, React voice UI)  │
-                 │  sessions · CSRF · rate limits · consent checks  │
-                 └───────────────┬───────────────────┬──────────────┘
-                                 │                   │ /voice-api/*
-                                 ▼                   ▼
-                     ┌────────────────────┐  ┌──────────────────────────────┐
-                     │  Eligibility engine │  │  FastAPI voice service        │
-                     │  (JavaScript)       │  │  ├─ speech recognition        │
-                     └─────────┬──────────┘  │  ├─ translation               │
-                               │             │  ├─ conversation & extraction │
-                               ▼             │  ├─ eligibility engine (Py)   │
-                     ┌────────────────────┐  │  └─ speech synthesis          │
-                     │    PostgreSQL       │◀─┴──────────────────────────────┘
-                     │ schemes · locations │
-                     │ users · audit log   │
-                     └────────────────────┘
+
+```mermaid
+flowchart LR
+    P["Citizen profile"] --> L{"Scheme applies to<br/>their state / district?"}
+    L -->|No| H["Never shown"]
+    L -->|Yes| R["Check every rule:<br/>true · false · unknown"]
+    R --> E["🟢 Potentially eligible"]
+    R --> M["🟡 More information required"]
+    R --> X["🔴 Not currently eligible"]
+    M --> Q["Ask the one question that<br/>unlocks the most schemes"]
 ```
+
+📐 **Full architecture** — components, request and voice sequence diagrams, data model, catalogue lifecycle, security layers, deployment and design decisions — in **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 | Layer | Tech |
 |---|---|
