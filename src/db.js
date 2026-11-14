@@ -41,4 +41,7 @@ async function tx(fn) {
   }
 }
 
-module.exports = { pool, query, one, many, tx };
+// EPHEMERAL_DB=true marks deployments whose database is reset on restart (shown as a banner).
+const ephemeral = process.env.EPHEMERAL_DB === 'true';
+
+module.exports = { pool, query, one, many, tx, ephemeral };

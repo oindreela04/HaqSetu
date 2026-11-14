@@ -62,6 +62,7 @@ function createApp() {
     res.locals.path = req.path;
     res.locals.title = null;
     res.locals.user = null;
+    res.locals.ephemeral = db.ephemeral;
     res.locals.csrfToken = '';
     res.locals.siteUrl = process.env.SITE_URL || '';
     next();

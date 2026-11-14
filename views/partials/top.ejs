@@ -39,5 +39,6 @@
     </nav>
   </div>
 </header>
+<% if (ephemeral) { %><div class="preview-banner" role="note">Preview mode: HaqSetu is running on a temporary database. Scheme search and the quick check work normally, but accounts and saved profiles may be reset when the server restarts.</div><% } %>
 <main id="main">
 <% if (flash && flash.length) { %><div class="wrap flashes"><% flash.forEach(function(f){ %><div class="flash flash-<%= f.type %>" role="status"><%= f.msg %></div><% }) %></div><% } %>

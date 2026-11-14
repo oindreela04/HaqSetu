@@ -20,6 +20,10 @@ npm start            # runs migrations + seeds on boot, serves :3000
 npm test             # needs a Postgres database at TEST_DATABASE_URL
 ```
 
+## Database modes
+- **Permanent (recommended for production):** set `DATABASE_URL` to any PostgreSQL 14+.
+- **Bundled (zero-cost preview):** if `DATABASE_URL` is not set, the app starts its own private PostgreSQL inside the server (via `embedded-postgres`). It is fully isolated, but **all accounts and edits reset when the server restarts**, and a banner tells visitors so. Seed schemes reload automatically on every boot.
+
 ## Environment variables
 | Variable | Purpose |
 |---|---|
