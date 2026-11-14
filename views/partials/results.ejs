@@ -1,0 +1,19 @@
+<% var g = results.groups; var active = typeof tab !== 'undefined' ? tab : 'eligible'; %>
+<% if (results.unlock && results.unlock.length) { %>
+<div class="unlock card">
+  <b>Answer these to sharpen your results:</b>
+  <ul><% results.unlock.forEach(function(u){ %><li><%= u.label %> <span class="muted">— affects <%= u.count %> scheme<%= u.count>1?'s':'' %></span></li><% }) %></ul>
+  <% if (user) { %><a class="btn btn-sm" href="/profile">Update profile</a><% } %>
+</div>
+<% } %>
+<div class="tabs" role="tablist" data-tabs>
+  <button role="tab" data-tab="eligible" aria-selected="<%= active==='eligible' %>" class="tab tab-ok"><%= t('eligible') %> <span class="count"><%= g.eligible.length %></span></button>
+  <button role="tab" data-tab="more_info" aria-selected="<%= active==='more_info' %>" class="tab tab-info"><%= t('more_info') %> <span class="count"><%= g.more_info.length %></span></button>
+  <button role="tab" data-tab="not_eligible" aria-selected="<%= active==='not_eligible' %>" class="tab tab-no"><%= t('not_eligible') %> <span class="count"><%= g.not_eligible.length %></span></button>
+</div>
+<% ['eligible','more_info','not_eligible'].forEach(function(k){ %>
+  <div class="tabpanel" data-panel="<%= k %>" <%= active===k ? '' : 'hidden' %>>
+    <% if (!g[k].length) { %><p class="muted empty">No schemes in this group.</p><% } %>
+    <div class="results"><% g[k].forEach(function(ev){ %><%- include('result-card', { ev: ev, showActions: showActions }) %><% }) %></div>
+  </div>
+<% }) %>

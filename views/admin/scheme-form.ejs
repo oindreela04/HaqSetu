@@ -1,0 +1,90 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1><%= s.id ? 'Edit scheme' : 'New scheme' %></h1>
+  <%- include('_nav') %>
+  <%- include('../partials/errors') %>
+  <% if (s.id) { %>
+  <div class="card verify-panel">
+    <div>
+      <b>Verification:</b> <span class="badge vs-<%= s.verification_status %>"><%= s.verification_status %></span>
+      · <b>Status:</b> <%= s.status %>
+      <% if (s.last_verified_at) { %> · last verified <%= new Date(s.last_verified_at).toISOString().slice(0,10) %><% } %>
+      <% if (s.verification_notes) { %><p class="muted small">Notes: <%= s.verification_notes %></p><% } %>
+      <p class="small"><a href="/schemes/<%= s.slug %>" target="_blank">View public page ↗</a></p>
+    </div>
+    <form method="post" action="/admin/schemes/<%= s.id %>/verify" class="verify-form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input name="note" placeholder="Verification note — e.g. 'Checked against official guidelines PDF dated …'" maxlength="2000">
+      <div class="btn-row">
+        <button class="btn btn-sm" name="action" value="verify">✔ Mark verified</button>
+        <button class="btn btn-sm btn-ghost" name="action" value="needs_update">Needs update</button>
+        <button class="btn btn-sm btn-ghost" name="action" value="draft">Unpublish (draft)</button>
+        <button class="btn btn-sm btn-ghost" name="action" value="closed">Mark closed</button>
+        <button class="btn btn-sm btn-ghost" name="action" value="active">Mark active</button>
+        <button class="btn btn-sm btn-ghost" name="action" value="archived">Archive</button>
+      </div>
+    </form>
+  </div>
+  <% } %>
+  <form method="post" action="<%= s.id ? '/admin/schemes/' + s.id : '/admin/schemes' %>" class="admin-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="card grid2">
+      <label>Name<input name="name" required value="<%= s.name || '' %>"></label>
+      <label>URL slug<input name="slug" value="<%= s.slug || '' %>" placeholder="auto from name"></label>
+      <label class="span2">Short description (one line)<input name="short_description" maxlength="300" value="<%= s.short_description || '' %>"></label>
+      <label class="span2">Description<textarea name="description" rows="3"><%= s.description || '' %></textarea></label>
+      <label>Ministry / implementing authority<input name="ministry" value="<%= s.ministry || '' %>"></label>
+      <label>Department<input name="department" value="<%= s.department || '' %>"></label>
+      <label>Government level
+        <select name="level"><% ['central','state','ut','district'].forEach(function(l){ %><option <%= s.level===l?'selected':'' %>><%= l %></option><% }) %></select>
+      </label>
+      <label>State / UT codes (comma separated; blank = all India for central)<input name="state_codes" value="<%= (s.state_codes||[]).join(', ') %>" placeholder="e.g. WB or MH, GA"></label>
+      <label class="span2">Districts (one per line, exact names — leave blank for whole state)<textarea name="districts" rows="2"><%= districts %></textarea></label>
+      <fieldset class="span2"><legend>Beneficiary categories</legend>
+        <div class="cat-checks"><% F.CATEGORY_TAGS.forEach(function(c){ %><label class="check"><input type="checkbox" name="beneficiary_categories" value="<%= c[0] %>" <%= (s.beneficiary_categories||[]).includes(c[0])?'checked':'' %>> <%= c[1] %></label><% }) %></div>
+      </fieldset>
+      <label class="span2">Search tags (comma separated)<input name="tags" value="<%= (s.tags||[]).join(', ') %>"></label>
+    </div>
+
+    <div class="card">
+      <h2>Eligibility</h2>
+      <label>Eligibility as written in the official source<textarea name="eligibility_text" rows="3"><%= s.eligibility_text || '' %></textarea></label>
+      <h3>Machine-checkable rules</h3>
+      <p class="muted small">All conditions in the top list must hold. Use "manual" for anything that cannot be checked online (it will always show as "needs verification"). For OR-groups, edit the JSON directly: <code>{"any":[ ... ]}</code>.</p>
+      <div id="rule-builder" data-fields="<%= JSON.stringify(F.FIELDS) %>"></div>
+      <details><summary>Rules JSON (advanced)</summary>
+        <textarea name="rules" id="rules-json" rows="10" class="mono"><%= typeof s.rulesRaw === 'string' ? s.rulesRaw : JSON.stringify(s.rules || {all:[]}, null, 2) %></textarea>
+      </details>
+    </div>
+
+    <div class="card grid2">
+      <label class="span2">Benefits<textarea name="benefits" rows="3"><%= s.benefits || '' %></textarea></label>
+      <label>Benefit amount (short, as officially stated)<input name="benefit_amount" value="<%= s.benefit_amount || '' %>"></label>
+      <label>Application mode<input name="application_mode" value="<%= s.application_mode || '' %>" placeholder="Online / CSC / Office"></label>
+      <label class="span2">Required documents (one per line)<textarea name="documents" rows="4"><%= (s.documents||[]).join('\n') %></textarea></label>
+      <label class="span2">How to apply<textarea name="application_process" rows="3"><%= s.application_process || '' %></textarea></label>
+      <label>Deadline (if any)<input type="date" name="deadline" value="<%= s.deadline ? new Date(s.deadline).toISOString().slice(0,10) : '' %>"></label>
+      <label>Deadline note<input name="deadline_note" value="<%= s.deadline_note || '' %>"></label>
+      <label>Official scheme website<input name="official_url" type="url" value="<%= s.official_url || '' %>"></label>
+      <label>Official application link<input name="apply_url" type="url" value="<%= s.apply_url || '' %>"></label>
+      <label>Contact / helpline<input name="contact" value="<%= s.contact || '' %>"></label>
+      <label>Scheme status<select name="status"><% ['active','closed','suspended','archived'].forEach(function(v){ %><option <%= s.status===v?'selected':'' %>><%= v %></option><% }) %></select></label>
+      <label>Source URL (official page you verified against)<input name="source_url" type="url" value="<%= s.source_url || '' %>"></label>
+      <label>Source reference (document name, date)<input name="source_reference" value="<%= s.source_reference || '' %>"></label>
+      <% if (s.id) { %><label class="span2">Change note (for the revision history)<input name="change_note" maxlength="300"></label><% } %>
+    </div>
+    <div class="sticky-submit">
+      <button class="btn btn-lg">Save</button>
+      <button class="btn btn-lg btn-ghost" name="submit_for_review" value="1">Save & submit for review</button>
+    </div>
+  </form>
+
+  <% if (typeof revisions !== 'undefined' && revisions.length) { %>
+  <div class="card"><h2>Revision history</h2><ul class="plain small"><% revisions.forEach(function(r){ %><li><%= new Date(r.created_at).toISOString().replace('T',' ').slice(0,16) %> — <b><%= r.action %></b> by <%= r.by || 'system' %> <%= r.note ? '— ' + r.note : '' %> · <a href="/admin/revisions/<%= r.id %>" target="_blank">snapshot</a></li><% }) %></ul></div>
+  <% } %>
+  <% if (typeof reports !== 'undefined' && reports.length) { %>
+  <div class="card"><h2>Citizen reports</h2><ul class="plain small"><% reports.forEach(function(r){ %><li class="<%= r.resolved?'muted':'' %>"><%= new Date(r.created_at).toISOString().slice(0,10) %> — <%= r.message %></li><% }) %></ul></div>
+  <% } %>
+</section>
+<script src="/static/js/admin.js?v=3"></script>
+<%- include('../partials/bottom') %>

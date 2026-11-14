@@ -1,0 +1,37 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1><%= stateRow ? 'Schemes for ' + stateRow.name : 'Government schemes' %></h1>
+  <form class="filters" method="get" action="/schemes">
+    <input name="q" value="<%= filters.q %>" placeholder="<%= t('search_placeholder') %>" aria-label="Search">
+    <select name="state" aria-label="State">
+      <option value="">All of India</option>
+      <% states.forEach(function(s){ %><option value="<%= s.code %>" <%= filters.state===s.code?'selected':'' %>><%= s.name %></option><% }) %>
+    </select>
+    <select name="level" aria-label="Level">
+      <option value="">All levels</option>
+      <% [['central','Central'],['state','State'],['ut','Union Territory'],['district','District']].forEach(function(l){ %><option value="<%= l[0] %>" <%= filters.level===l[0]?'selected':'' %>><%= l[1] %></option><% }) %>
+    </select>
+    <select name="category" aria-label="Category">
+      <option value="">All categories</option>
+      <% F.CATEGORY_TAGS.forEach(function(c){ %><option value="<%= c[0] %>" <%= filters.category===c[0]?'selected':'' %>><%= c[1] %></option><% }) %>
+    </select>
+    <button class="btn">Filter</button>
+  </form>
+  <p class="muted"><%= result.total %> scheme<%= result.total===1?'':'s' %> found<%= stateRow ? ' (Central schemes + ' + stateRow.name + ' schemes)' : '' %>. <% if (!user) { %><a href="/check">Check which ones you qualify for →</a><% } else { %><a href="/dashboard">See your personal matches →</a><% } %></p>
+  <% if (stateRow && myschemeLink) { %><div class="note">Our reviewers are adding verified <%= stateRow.name %> schemes. You can also browse the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</div><% } %>
+  <div class="scheme-grid">
+    <% result.rows.forEach(function(s){ %>
+      <a class="scheme-card" href="/schemes/<%= s.slug %>">
+        <span class="badge lvl-<%= s.level %>"><%= {central:'Central',state:'State',ut:'UT',district:'District'}[s.level] %><%= s.level!=='central' && s.state_codes.length ? ' · ' + s.state_codes.join(', ') : '' %></span>
+        <% if (s.verification_status !== 'verified') { %><span class="badge badge-warn">Awaiting verification</span><% } %>
+        <h3><%= s.name %></h3>
+        <p><%= s.short_description %></p>
+        <% if (s.benefit_amount) { %><p class="amount"><%= s.benefit_amount %></p><% } %>
+      </a>
+    <% }) %>
+  </div>
+  <% if (result.pages > 1) { %>
+    <nav class="pager"><% for (var i=1;i<=result.pages;i++){ var qs = new URLSearchParams(Object.assign({}, filters, {page:i})).toString(); %><a class="<%= i===result.page?'on':'' %>" href="/schemes?<%= qs %>"><%= i %></a><% } %></nav>
+  <% } %>
+</section>
+<%- include('../partials/bottom') %>

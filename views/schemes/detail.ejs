@@ -1,0 +1,90 @@
+<%- include('../partials/top') %>
+<% var s = scheme; var LBL = {eligible: t('eligible'), more_info: t('more_info'), not_eligible: t('not_eligible')}; %>
+<article class="wrap pad detail">
+  <p class="crumbs"><a href="/schemes">Schemes</a> › <%= {central:'Central Government',state:'State Government',ut:'Union Territory',district:'District'}[s.level] %></p>
+  <div class="detail-head">
+    <div>
+      <span class="badge lvl-<%= s.level %>"><%= {central:'Central',state:'State',ut:'UT',district:'District'}[s.level] %></span>
+      <% if (s.status !== 'active') { %><span class="badge badge-no"><%= s.status %></span><% } %>
+      <h1><%= s.name %></h1>
+      <p class="lead"><%= s.short_description %></p>
+      <p class="muted small"><%= s.ministry %><%= s.department ? ' · ' + s.department : '' %><%= stateNames.length ? ' · ' + stateNames.join(', ') : '' %><%= districtNames.length ? ' · Districts: ' + districtNames.join(', ') : '' %></p>
+    </div>
+    <div class="detail-cta">
+      <% if (s.benefit_amount) { %><p class="amount big"><%= s.benefit_amount %></p><% } %>
+      <% if (s.apply_url) { %><a class="btn btn-lg" href="<%= s.apply_url %>" target="_blank" rel="noopener nofollow"><%= t('apply') %> ↗</a><% } %>
+      <% if (s.official_url) { %><a class="btn btn-ghost" href="<%= s.official_url %>" target="_blank" rel="noopener nofollow"><%= t('official_site') %> ↗</a><% } %>
+    </div>
+  </div>
+
+  <div class="verify-box <%= s.verification_status === 'verified' ? 'ok' : 'warn' %>">
+    <% if (s.verification_status === 'verified') { %>
+      ✔ Verified by a HaqSetu reviewer against official sources on <b><%= new Date(s.last_verified_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></b>.
+    <% } else { %>
+      ⚠ This information was compiled from official portals but <b>has not yet been verified</b> by a HaqSetu reviewer. Always confirm details on the official website before applying.
+    <% } %>
+    <% if (s.source_url) { %> Source: <a href="<%= s.source_url %>" target="_blank" rel="noopener nofollow"><%= s.source_reference || s.source_url %></a><% } %>
+  </div>
+
+  <% if (evaluation) { %>
+    <section class="card eval eval-<%= evaluation.status %>">
+      <h2>Your result: <%= LBL[evaluation.status] || 'Not applicable in your state' %></h2>
+      <% if (evaluation.status === 'out_of_area') { %>
+        <p>This scheme is only for residents of <%= stateNames.join(', ') %>. Based on the state in your profile, it does not apply to you.</p>
+      <% } else { %>
+        <p class="muted"><%= evaluation.whyShown %></p>
+        <ul class="checks"><% evaluation.trace.forEach(function(tr){ %><li class="c-<%= tr.result %>"><%= tr.label %><%= tr.result==='unknown' ? ' — not known yet' : '' %></li><% }) %></ul>
+        <p class="next"><b>What to do next:</b> <%= evaluation.nextStep %></p>
+        <% if (evaluation.missingFields.length) { %><a class="btn btn-sm" href="/profile">Add missing details</a><% } %>
+      <% } %>
+      <form method="post" action="/my-schemes/<%= s.id %>" class="inline track">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <span class="muted small">Track: </span>
+        <button class="btn btn-sm <%= userStatus==='saved'?'':'btn-ghost' %>" name="status" value="saved">★ Saved</button>
+        <button class="btn btn-sm <%= userStatus==='applied'?'':'btn-ghost' %>" name="status" value="applied">✓ Applied</button>
+        <% if (userStatus) { %><button class="btn btn-sm btn-ghost" name="status" value="clear">Clear</button><% } %>
+      </form>
+    </section>
+  <% } else { %>
+    <section class="card eval"><p><b>Want to know if you qualify?</b> <a href="/check">Run a quick check</a> or <a href="/register">create a free account</a> for personalised results.</p></section>
+  <% } %>
+
+  <div class="detail-grid">
+    <div>
+      <% if (s.description) { %><h2>About the scheme</h2><p><%= s.description %></p><% } %>
+      <h2>Who can apply</h2>
+      <% if (s.eligibility_text) { %><p><%= s.eligibility_text %></p><% } %>
+      <% if (ruleLines.length) { %><p class="muted small">Conditions HaqSetu checks automatically:</p><ul class="plain"><% ruleLines.forEach(function(l){ %><li><%= l %></li><% }) %></ul><% } %>
+      <h2>Benefits</h2><p><%= s.benefits || '—' %></p>
+      <h2>How to apply</h2><p><%= s.application_process || 'See the official website.' %></p>
+      <% if (s.application_mode) { %><p class="muted small">Mode: <%= s.application_mode %></p><% } %>
+      <% if (aiEnabled && user) { %>
+        <div class="card ai" data-explain="/schemes/<%= s.slug %>/explain">
+          <button class="btn btn-sm btn-ghost" type="button">Explain this in simple language</button>
+          <div class="ai-out" aria-live="polite"></div>
+          <p class="muted small">AI-generated summary of the record above. It does not decide eligibility.</p>
+        </div>
+      <% } %>
+    </div>
+    <aside>
+      <div class="card">
+        <h3>Documents usually needed</h3>
+        <% if (s.documents.length) { %><ul class="docs"><% s.documents.forEach(function(d){ %><li><%= d %></li><% }) %></ul><% } else { %><p class="muted">See official website.</p><% } %>
+        <% if (s.deadline || s.deadline_note) { %><h3>Deadline</h3><p><%= s.deadline ? new Date(s.deadline).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'}) : '' %> <%= s.deadline_note %></p><% } %>
+        <% if (s.contact) { %><h3>Help</h3><p><%= s.contact %></p><% } %>
+      </div>
+      <div class="card safety">
+        <b>Stay safe:</b> HaqSetu never asks for money, OTPs or Aadhaar numbers. Government schemes are free to apply for — beware of agents charging fees.
+      </div>
+      <details class="card" id="report">
+        <summary>Report incorrect or outdated information</summary>
+        <form method="post" action="/schemes/<%= s.slug %>/report">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <textarea name="message" rows="3" maxlength="2000" required placeholder="What is wrong? A link to the official notice helps."></textarea>
+          <button class="btn btn-sm">Send to reviewers</button>
+        </form>
+      </details>
+    </aside>
+  </div>
+</article>
+<%- include('../partials/bottom') %>

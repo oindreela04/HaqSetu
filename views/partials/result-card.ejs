@@ -1,0 +1,28 @@
+<% var s = ev.scheme; %>
+<article class="result result-<%= ev.status %>">
+  <header>
+    <span class="badge lvl-<%= s.level %>"><%= {central:'Central',state:'State',ut:'UT',district:'District'}[s.level] %><%= s.state_codes && s.state_codes.length && s.level!=='central' ? ' · ' + s.state_codes.join(', ') : '' %></span>
+    <% if (s.verification_status !== 'verified') { %><span class="badge badge-warn" title="Not yet verified by a HaqSetu reviewer">Awaiting verification</span><% } %>
+    <% if (ev.userStatus) { %><span class="badge badge-user"><%= ev.userStatus %></span><% } %>
+    <h3><a href="/schemes/<%= s.slug %>"><%= s.name %></a></h3>
+    <% if (s.benefit_amount) { %><p class="amount"><%= s.benefit_amount %></p><% } %>
+  </header>
+  <p><%= s.short_description %></p>
+  <details>
+    <summary>Why this result?</summary>
+    <ul class="checks">
+      <% ev.trace.forEach(function(t){ %><li class="c-<%= t.result %>"><%= t.label %></li><% }) %>
+    </ul>
+    <p class="next"><b>Next step:</b> <%= ev.nextStep %></p>
+  </details>
+  <% if (typeof showActions !== 'undefined' && showActions) { %>
+  <div class="actions">
+    <a class="btn btn-sm" href="/schemes/<%= s.slug %>">Details & how to apply</a>
+    <% if (ev.status === 'eligible' && !ev.userStatus) { %>
+      <form method="post" action="/my-schemes/<%= s.id %>" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="back" value="/dashboard"><button class="btn btn-sm btn-ghost" name="status" value="saved">Save</button><button class="btn btn-sm btn-ghost" name="status" value="applied">Already applied</button><button class="btn btn-sm btn-ghost" name="status" value="dismissed" title="Hide from Missed Benefits">Not relevant</button></form>
+    <% } %>
+  </div>
+  <% } else { %>
+  <div class="actions"><a class="btn btn-sm" href="/schemes/<%= s.slug %>">Details & how to apply</a></div>
+  <% } %>
+</article>

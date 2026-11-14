@@ -1,0 +1,13 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <p class="eyebrow">Step 2 of 2</p>
+  <h1>Tell us about yourself</h1>
+  <p class="lead">Only your state is required. Every extra answer makes your results more accurate. You can change these any time.</p>
+  <%- include('../partials/errors') %>
+  <form method="post" action="/onboarding" class="profile-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('../partials/profile-fields', { formMode: 'profile' }) %>
+    <div class="sticky-submit"><button class="btn btn-lg">Save & see my schemes</button></div>
+  </form>
+</section>
+<%- include('../partials/bottom') %>

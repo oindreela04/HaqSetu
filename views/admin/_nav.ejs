@@ -1,0 +1,9 @@
+<nav class="admin-nav">
+  <a href="/admin" class="<%= path==='/admin'?'on':'' %>">Overview</a>
+  <a href="/admin/schemes" class="<%= path.startsWith('/admin/schemes')?'on':'' %>">Schemes</a>
+  <a href="/admin/schemes?vs=pending_review">Verification queue</a>
+  <a href="/admin/reports" class="<%= path==='/admin/reports'?'on':'' %>">Citizen reports</a>
+  <a href="/admin/import" class="<%= path==='/admin/import'?'on':'' %>">Import / export</a>
+  <a href="/admin/locations" class="<%= path.startsWith('/admin/locations')?'on':'' %>">Locations</a>
+  <% if (user.role === 'admin') { %><a href="/admin/users" class="<%= path==='/admin/users'?'on':'' %>">Users</a><a href="/admin/audit" class="<%= path==='/admin/audit'?'on':'' %>">Audit log</a><% } %>
+</nav>

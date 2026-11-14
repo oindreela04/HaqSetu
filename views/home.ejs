@@ -1,0 +1,57 @@
+<%- include('partials/top') %>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Central · State · UT · District</p>
+      <h1><%= t('hero_title') %></h1>
+      <p class="lead"><%= t('hero_sub') %></p>
+      <div class="cta-row">
+        <a class="btn btn-lg" href="/check"><%= t('cta_check') %></a>
+        <a class="btn btn-lg btn-ghost" href="<%= user ? '/dashboard' : '/register' %>"><%= user ? t('nav_dashboard') : t('cta_register') %></a>
+      </div>
+      <form class="search" action="/schemes" method="get" role="search">
+        <input name="q" placeholder="<%= t('search_placeholder') %>" aria-label="<%= t('search') %>">
+        <button class="btn"><%= t('search') %></button>
+      </form>
+    </div>
+    <aside class="hero-card" aria-label="How HaqSetu works">
+      <div class="stat"><b><%= counts.total %></b><span>schemes in catalogue</span></div>
+      <div class="stat"><b>36</b><span>states & UTs covered</span></div>
+      <ol class="how">
+        <li><b>Tell us a little</b> — state, age, income, situation. No Aadhaar, no bank details.</li>
+        <li><b>See every match</b> — eligible, needs-more-info, or not eligible, with reasons.</li>
+        <li><b>Apply officially</b> — we link only to government portals.</li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<section class="wrap pad">
+  <div class="split-head">
+    <h2>Missed Benefits Detector</h2>
+    <p class="muted">Most people only find schemes they already know about. HaqSetu checks your profile against <em>every</em> active scheme for your state and the Centre — and tells you which one more answer would unlock.</p>
+  </div>
+  <div class="feature-row">
+    <div class="feature"><span class="dot dot-ok"></span><h3>Potentially eligible</h3><p>Your details meet every known rule. We show the documents and the official link.</p></div>
+    <div class="feature"><span class="dot dot-info"></span><h3>More information required</h3><p>One or two answers are missing — we tell you exactly which question to answer.</p></div>
+    <div class="feature"><span class="dot dot-no"></span><h3>Not currently eligible</h3><p>We explain which condition is not met, so you know what would change it.</p></div>
+  </div>
+</section>
+
+<section class="wrap pad" id="states">
+  <h2><%= t('choose_state') %></h2>
+  <div class="state-grid">
+    <% states.forEach(function(s){ %>
+      <a class="state-chip" href="/schemes?state=<%= s.code %>"><span><%= s.name %></span><small><%= s.type === 'ut' ? 'UT' : '' %><%= s.n ? (s.type==='ut'?' · ':'') + s.n + ' state scheme' + (s.n>1?'s':'') : '' %></small></a>
+    <% }) %>
+  </div>
+  <p class="muted small">Every state shows all applicable Central Government schemes. State-specific coverage is growing as our reviewers verify more official notifications.</p>
+</section>
+
+<section class="wrap pad">
+  <h2>Browse by need</h2>
+  <div class="cat-grid">
+    <% F.CATEGORY_TAGS.forEach(function(c){ %><a class="cat" href="/schemes?category=<%= c[0] %>"><%= c[1] %></a><% }) %>
+  </div>
+</section>
+<%- include('partials/bottom') %>

@@ -1,0 +1,103 @@
+<%
+  var v = values || {}; var fl = v.flags || {};
+  function sel(list, key, cur) { return list.map(function(o){ return '<option value="'+o[0]+'"'+(cur===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join(''); }
+  var mode = typeof formMode !== 'undefined' ? formMode : 'profile';
+%>
+<fieldset class="card">
+  <legend><span class="step">1</span> Where you live <em class="req">required</em></legend>
+  <p class="hint">Your state decides which state schemes you see. Central schemes are shown everywhere.</p>
+  <div class="grid2">
+    <label>State / Union Territory
+      <select name="state_id" id="state_id" required data-district-target="district_id">
+        <option value="">— Select —</option>
+        <optgroup label="States"><% states.filter(function(s){return s.type==='state'}).forEach(function(s){ %><option value="<%= s.id %>" <%= String(v.state_id)===String(s.id)?'selected':'' %>><%= s.name %></option><% }) %></optgroup>
+        <optgroup label="Union Territories"><% states.filter(function(s){return s.type==='ut'}).forEach(function(s){ %><option value="<%= s.id %>" <%= String(v.state_id)===String(s.id)?'selected':'' %>><%= s.name %></option><% }) %></optgroup>
+      </select>
+    </label>
+    <label>District <em class="opt">recommended</em>
+      <select name="district_id" id="district_id" data-selected="<%= v.district_id || '' %>"><option value="">— Select state first —</option></select>
+    </label>
+    <label>Rural or urban?
+      <select name="residence"><option value="">Not sure / skip</option><%- sel(F.RESIDENCE, 'residence', v.residence) %></select>
+    </label>
+    <% if (mode !== 'check') { %>
+    <label>PIN code <em class="opt">optional</em>
+      <input name="pincode" inputmode="numeric" pattern="[1-9][0-9]{5}" maxlength="6" value="<%= v.pincode || '' %>">
+    </label>
+    <% } %>
+  </div>
+</fieldset>
+
+<fieldset class="card">
+  <legend><span class="step">2</span> About you</legend>
+  <div class="grid2">
+    <% if (mode === 'check') { %>
+      <label>Age <input name="age" type="number" min="0" max="120" inputmode="numeric" value="<%= v.age !== undefined ? v.age : '' %>"></label>
+    <% } else { %>
+      <label>Date of birth <em class="opt">or enter age</em><input name="dob" type="date" value="<%= v.dob || '' %>" max="<%= new Date().toISOString().slice(0,10) %>"></label>
+      <label>Age (if you prefer not to give date of birth)<input name="age" type="number" min="0" max="120" inputmode="numeric" value="<%= (!v.dob && v.age !== undefined) ? v.age : '' %>"></label>
+    <% } %>
+    <label>Gender <em class="opt">used only for women-specific schemes</em>
+      <select name="gender"><option value="">Skip</option><%- sel(F.GENDERS, 'gender', v.gender) %></select>
+    </label>
+    <label>Marital status <em class="opt">optional</em>
+      <select name="marital_status"><option value="">Skip</option><%- sel(F.MARITAL, 'marital_status', v.marital_status) %></select>
+    </label>
+    <label>Social category <em class="opt">optional — for SC/ST/OBC schemes</em>
+      <select name="social_category"><option value="">Skip</option><%- sel(F.SOCIAL_CATEGORY, 'social_category', v.social_category) %></select>
+    </label>
+  </div>
+</fieldset>
+
+<fieldset class="card">
+  <legend><span class="step">3</span> Education & work</legend>
+  <div class="grid2">
+    <label>Highest education (or currently studying)
+      <select name="education"><option value="">Skip</option><%- sel(F.EDUCATION, 'education', v.education) %></select>
+    </label>
+    <label>Employment status
+      <select name="employment"><option value="">Skip</option><%- sel(F.EMPLOYMENT, 'employment', v.employment) %></select>
+    </label>
+    <label>Occupation / type of work
+      <select name="occupation"><option value="">Skip</option><%- sel(F.OCCUPATION, 'occupation', v.occupation) %></select>
+    </label>
+    <label>Class 12 marks (%) <em class="opt">students, optional</em>
+      <input name="class12_percent" type="number" min="0" max="100" step="0.1" value="<%= v.class12_percent !== undefined ? v.class12_percent : '' %>">
+    </label>
+  </div>
+</fieldset>
+
+<fieldset class="card">
+  <legend><span class="step">4</span> Family & income</legend>
+  <p class="hint">An approximate figure is fine. We never ask for bank details, Aadhaar or OTPs.</p>
+  <div class="grid2">
+    <label>Total annual household income (₹)
+      <input name="annual_income" inputmode="numeric" placeholder="e.g. 180000" value="<%= v.annual_income !== undefined ? v.annual_income : '' %>">
+    </label>
+    <label>Your own monthly income (₹) <em class="opt">for worker pension schemes</em>
+      <input name="monthly_income" inputmode="numeric" placeholder="e.g. 12000" value="<%= v.monthly_income !== undefined ? v.monthly_income : '' %>">
+    </label>
+    <label>Family size (people)
+      <input name="family_size" type="number" min="1" max="50" value="<%= v.family_size !== undefined ? v.family_size : '' %>">
+    </label>
+    <label>Disability percentage (as per certificate) <em class="opt">voluntary</em>
+      <input name="disability_percent" type="number" min="0" max="100" value="<%= v.disability_percent !== undefined ? v.disability_percent : '' %>">
+    </label>
+  </div>
+</fieldset>
+
+<fieldset class="card">
+  <legend><span class="step">5</span> Your situation <em class="opt">answer what you can — each answer unlocks more accurate results</em></legend>
+  <div class="flags">
+  <% F.FLAGS.forEach(function(f){ var cur = fl[f[0]]; %>
+    <div class="flag" role="radiogroup" aria-label="<%= f[1] %>">
+      <span><%= f[1] %></span>
+      <span class="tri">
+        <label><input type="radio" name="flag_<%= f[0] %>" value="yes" <%= cur===true?'checked':'' %>>Yes</label>
+        <label><input type="radio" name="flag_<%= f[0] %>" value="no" <%= cur===false?'checked':'' %>>No</label>
+        <label><input type="radio" name="flag_<%= f[0] %>" value="" <%= (cur!==true&&cur!==false)?'checked':'' %>>Not sure</label>
+      </span>
+    </div>
+  <% }) %>
+  </div>
+</fieldset>

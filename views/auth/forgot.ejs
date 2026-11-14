@@ -1,0 +1,15 @@
+<%- include('../partials/top') %>
+<section class="wrap narrow pad">
+  <h1>Reset your password</h1>
+  <% if (sent) { %>
+    <div class="card"><p>If an account exists for that email, we have sent a reset link. It is valid for 1 hour.</p>
+    <% if (!mailConfigured) { %><p class="muted small">Note: email delivery is not yet configured on this server, so messages may not arrive. Please contact the site administrator.</p><% } %></div>
+  <% } else { %>
+  <form method="post" action="/forgot-password" class="card form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <button class="btn btn-lg">Send reset link</button>
+  </form>
+  <% } %>
+</section>
+<%- include('../partials/bottom') %>

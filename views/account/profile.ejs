@@ -1,0 +1,12 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Your profile</h1>
+  <p class="lead">Moved, changed jobs, or had a change in family income? Update here and your recommendations refresh instantly.</p>
+  <%- include('../partials/errors') %>
+  <form method="post" action="/profile" class="profile-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('../partials/profile-fields', { formMode: 'profile' }) %>
+    <div class="sticky-submit"><button class="btn btn-lg">Save & refresh recommendations</button></div>
+  </form>
+</section>
+<%- include('../partials/bottom') %>

@@ -1,0 +1,23 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Schemes</h1>
+  <%- include('_nav') %>
+  <form class="filters" method="get">
+    <input name="q" value="<%= q.q || '' %>" placeholder="Search by name">
+    <select name="vs"><option value="">Any verification</option><% ['draft','pending_review','verified','needs_update'].forEach(function(v){ %><option <%= q.vs===v?'selected':'' %>><%= v %></option><% }) %></select>
+    <select name="level"><option value="">Any level</option><% ['central','state','ut','district'].forEach(function(v){ %><option <%= q.level===v?'selected':'' %>><%= v %></option><% }) %></select>
+    <input name="state" value="<%= q.state || '' %>" placeholder="State code e.g. WB" maxlength="4" size="8">
+    <button class="btn">Filter</button>
+    <a class="btn btn-ghost" href="/admin/schemes/new">+ New scheme</a>
+  </form>
+  <table class="table">
+    <thead><tr><th>Name</th><th>Level</th><th>States</th><th>Verification</th><th>Status</th><th>Last verified</th></tr></thead>
+    <tbody>
+    <% rows.forEach(function(r){ %>
+      <tr><td><a href="/admin/schemes/<%= r.id %>/edit"><%= r.name %></a></td><td><%= r.level %></td><td><%= r.state_codes.join(', ') || 'All' %></td><td><span class="badge vs-<%= r.verification_status %>"><%= r.verification_status %></span></td><td><%= r.status %></td><td><%= r.last_verified_at ? new Date(r.last_verified_at).toISOString().slice(0,10) : '—' %></td></tr>
+    <% }) %>
+    </tbody>
+  </table>
+  <% if (!rows.length) { %><p class="muted">No schemes match.</p><% } %>
+</section>
+<%- include('../partials/bottom') %>

@@ -1,0 +1,20 @@
+<%- include('../partials/top') %>
+<section class="wrap narrow pad">
+  <h1>Create your free account</h1>
+  <p class="muted">Save your results, track applications and refresh recommendations when your situation changes.</p>
+  <%- include('../partials/errors') %>
+  <form method="post" action="/register" class="card form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Full name<input name="name" required autocomplete="name" value="<%= values.name || '' %>"></label>
+    <label>Email<input name="email" type="email" required autocomplete="email" value="<%= values.email || '' %>"></label>
+    <label>Mobile number <em class="opt">optional</em><input name="mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile" value="<%= values.mobile || '' %>"></label>
+    <label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password" aria-describedby="pwhint"></label>
+    <small id="pwhint" class="muted">At least 8 characters with a letter and a number.</small>
+    <label>Confirm password<input name="password_confirm" type="password" required minlength="8" autocomplete="new-password"></label>
+    <label class="check"><input type="checkbox" name="consent" required> I agree to the <a href="/terms" target="_blank">Terms</a> and <a href="/privacy" target="_blank">Privacy Policy</a>, and consent to HaqSetu using my profile to match schemes.</label>
+    <label class="check"><input type="checkbox" name="email_updates"> Email me about new schemes that match my profile (optional)</label>
+    <button class="btn btn-lg">Create account</button>
+    <p class="small">Already registered? <a href="/login">Log in</a></p>
+  </form>
+</section>
+<%- include('../partials/bottom') %>

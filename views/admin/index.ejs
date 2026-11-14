@@ -1,0 +1,37 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Admin</h1>
+  <%- include('_nav') %>
+  <div class="stat-row">
+    <div class="card stat"><b><%= stats.users %></b><span>registered users</span></div>
+    <div class="card stat"><b><%= stats.profiles %></b><span>completed profiles</span></div>
+    <div class="card stat"><b><%= stats.new_users %></b><span>new this week</span></div>
+    <div class="card stat"><b><%= stats.open_reports %></b><span>open citizen reports</span></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Catalogue verification</h2>
+      <ul class="plain">
+        <li><a href="/admin/schemes?vs=verified">Verified</a>: <b><%= byStatus.verified || 0 %></b></li>
+        <li><a href="/admin/schemes?vs=pending_review">Awaiting review</a>: <b><%= byStatus.pending_review || 0 %></b></li>
+        <li><a href="/admin/schemes?vs=needs_update">Needs update</a>: <b><%= byStatus.needs_update || 0 %></b></li>
+        <li><a href="/admin/schemes?vs=draft">Drafts (hidden)</a>: <b><%= byStatus.draft || 0 %></b></li>
+      </ul>
+      <h3>Verification workflow</h3>
+      <ol class="small">
+        <li>Open a scheme in the queue and compare every field with the official notification / portal.</li>
+        <li>Correct anything outdated; put the exact official page in <i>Source URL</i>.</li>
+        <li>Click <b>Mark verified</b> with a note of what you checked. Any later edit sends it back to the queue.</li>
+        <li>Re-verify records older than 6 months (listed on this page).</li>
+      </ol>
+      <% if (stale.length) { %><h3>Due for re-verification</h3><ul class="plain small"><% stale.forEach(function(s){ %><li><a href="/admin/schemes/<%= s.id %>/edit"><%= s.name %></a></li><% }) %></ul><% } %>
+    </div>
+    <div class="card">
+      <h2>State coverage</h2>
+      <p class="muted small">State/UT-specific schemes in the catalogue (Central schemes apply everywhere).</p>
+      <div class="coverage"><% coverage.forEach(function(c){ %><a href="/admin/schemes?state=<%= c.code %>" class="cov <%= c.n ? '' : 'zero' %>"><%= c.name %> <b><%= c.n %></b></a><% }) %></div>
+      <p class="small"><a class="btn btn-sm" href="/admin/schemes/new">+ Add a scheme</a></p>
+    </div>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

@@ -1,0 +1,10 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Citizen reports</h1>
+  <%- include('_nav') %>
+  <table class="table"><thead><tr><th>Date</th><th>Scheme</th><th>Report</th><th></th></tr></thead><tbody>
+  <% rows.forEach(function(r){ %><tr class="<%= r.resolved?'muted':'' %>"><td><%= new Date(r.created_at).toISOString().slice(0,10) %></td><td><a href="/admin/schemes/<%= r.sid %>/edit"><%= r.scheme_name %></a></td><td><%= r.message %></td><td><% if (!r.resolved) { %><form method="post" action="/admin/reports/<%= r.id %>/resolve"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-sm btn-ghost">Resolve</button></form><% } else { %>resolved<% } %></td></tr><% }) %>
+  </tbody></table>
+  <% if (!rows.length) { %><p class="muted">No reports yet.</p><% } %>
+</section>
+<%- include('../partials/bottom') %>

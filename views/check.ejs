@@ -1,0 +1,21 @@
+<%- include('partials/top') %>
+<section class="wrap pad">
+<% if (!results) { %>
+  <h1>Quick eligibility check</h1>
+  <p class="lead">Answer what you can — it takes about two minutes. Nothing is saved unless you create an account.</p>
+  <%- include('partials/errors') %>
+  <form method="post" action="/check" class="profile-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('partials/profile-fields', { formMode: 'check' }) %>
+    <div class="sticky-submit"><button class="btn btn-lg">Show my schemes</button></div>
+  </form>
+<% } else { %>
+  <h1>Your results</h1>
+  <p class="lead">We checked <b><%= results.total %></b> schemes for <%= stateRow ? stateRow.name : 'all of India (choose a state to include state schemes)' %>.
+    <a href="/register">Create a free account</a> to save these results, track applications and get updates when your situation changes.</p>
+  <%- include('partials/results', { results: results, showActions: false, tab: 'eligible' }) %>
+  <% if (myschemeLink) { %><p class="muted small">Looking for more <%= stateRow.name %> schemes? Also search the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</p><% } %>
+  <p><a class="btn btn-ghost" href="/check">Start again</a></p>
+<% } %>
+</section>
+<%- include('partials/bottom') %>

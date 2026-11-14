@@ -1,0 +1,45 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <div class="dash-head">
+    <div>
+      <p class="eyebrow">Namaste, <%= user.name.split(' ')[0] %></p>
+      <h1>My benefits</h1>
+      <p class="muted">Showing schemes for <b><%= profile.district_name ? profile.district_name + ', ' : '' %><%= profile.state_name %></b> and the Central Government. <a href="/profile">Change location or details</a></p>
+    </div>
+    <div class="meter" aria-label="Profile completeness">
+      <progress class="meter-bar" max="100" value="<%= completeness %>"><%= completeness %>%</progress>
+      <small>Profile <%= completeness %>% complete</small>
+    </div>
+  </div>
+  <% if (!user.email_verified_at) { %><div class="note">Please verify your email address. <a href="/account">Resend link</a></div><% } %>
+
+  <% if (!matchingAllowed) { %>
+    <div class="card"><p>You have turned off profile-based matching in your <a href="/account">privacy settings</a>. Turn it on to see personalised recommendations, or <a href="/schemes">browse all schemes</a>.</p></div>
+  <% } else { %>
+    <section class="missed card">
+      <div class="missed-head">
+        <h2>🔎 <%= t('missed') %></h2>
+        <p>We compared your profile against <b><%= results.total %></b> active schemes. These match your details and you haven't saved or applied for them yet.</p>
+      </div>
+      <% if (results.missed.length) { %>
+        <div class="results compact"><% results.missed.slice(0, 6).forEach(function(ev){ %><%- include('../partials/result-card', { ev: ev, showActions: true }) %><% }) %></div>
+        <% if (results.missed.length > 6) { %><p class="muted">+ <%= results.missed.length - 6 %> more in the list below.</p><% } %>
+      <% } else { %>
+        <p class="muted">Nothing missed right now. <% if (results.unlock.length) { %>Answer the questions below to check more schemes.<% } %></p>
+      <% } %>
+    </section>
+
+    <% if (saved.length) { %>
+    <section class="card">
+      <h2>Tracked schemes</h2>
+      <ul class="tracked"><% saved.forEach(function(s){ %><li><a href="/schemes/<%= s.slug %>"><%= s.name %></a> <span class="badge badge-user"><%= s.status %></span></li><% }) %></ul>
+    </section>
+    <% } %>
+
+    <h2>All results</h2>
+    <%- include('../partials/results', { results: results, showActions: true, tab: tab }) %>
+    <% if (myschemeLink) { %><p class="muted small">Also check the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= profile.state_name %></a> for schemes our reviewers haven't added yet.</p><% } %>
+  <% } %>
+  <p class="muted small"><%= t('disclaimer_short') %></p>
+</section>
+<%- include('../partials/bottom') %>

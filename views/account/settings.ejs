@@ -1,0 +1,54 @@
+<%- include('../partials/top') %>
+<section class="wrap narrow pad">
+  <h1>Account & privacy</h1>
+
+  <div class="card">
+    <h2>Your details</h2>
+    <p class="muted small">Email: <b><%= user.email %></b> — <%= user.email_verified_at ? '✔ verified' : 'not verified' %></p>
+    <% if (!user.email_verified_at) { %>
+      <form method="post" action="/verify-email/resend" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-sm btn-ghost">Resend verification email</button></form>
+      <% if (!mailConfigured) { %><p class="muted small">Email delivery is not yet configured on this server.</p><% } %>
+    <% } %>
+    <form method="post" action="/account/details" class="form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Full name<input name="name" required value="<%= user.name %>"></label>
+      <label>Mobile <em class="opt">optional</em><input name="mobile" type="tel" value="<%= user.mobile || '' %>"></label>
+      <button class="btn btn-sm">Save details</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Privacy & consent</h2>
+    <form method="post" action="/account/consent" class="form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label class="check"><input type="checkbox" name="use_profile_for_matching" <%= consent.use_profile_for_matching ? 'checked' : '' %>> Use my profile to recommend schemes (required for personalised results)</label>
+      <label class="check"><input type="checkbox" name="email_updates" <%= consent.email_updates ? 'checked' : '' %>> Email me about new schemes that match me</label>
+      <label class="check"><input type="checkbox" name="deadline_reminders" <%= consent.deadline_reminders ? 'checked' : '' %>> Remind me about deadlines of schemes I save</label>
+      <button class="btn btn-sm">Save preferences</button>
+    </form>
+    <p class="small"><a href="/account/export">Download all my data (JSON)</a> · <a href="/privacy">How we use your data</a></p>
+  </div>
+
+  <div class="card">
+    <h2>Change password</h2>
+    <form method="post" action="/account/password" class="form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Current password<input name="current_password" type="password" required autocomplete="current-password"></label>
+      <label>New password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+      <label>Confirm new password<input name="password_confirm" type="password" required minlength="8" autocomplete="new-password"></label>
+      <button class="btn btn-sm">Change password</button>
+    </form>
+  </div>
+
+  <div class="card danger" id="delete">
+    <h2>Delete account</h2>
+    <p>This permanently deletes your account, profile, consents and saved schemes. It cannot be undone.</p>
+    <form method="post" action="/account/delete" class="form" data-confirm="Permanently delete your HaqSetu account?">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Type DELETE to confirm<input name="confirm" required pattern="DELETE" autocomplete="off"></label>
+      <label>Current password<input name="password" type="password" required autocomplete="current-password"></label>
+      <button class="btn btn-danger">Delete my account</button>
+    </form>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

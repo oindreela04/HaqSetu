@@ -1,0 +1,36 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Import & export</h1>
+  <%- include('_nav') %>
+  <%- include('../partials/errors') %>
+  <% if (result) { %><div class="flash flash-success">Inserted <b><%= result.inserted %></b>, updated <b><%= result.updated %></b>, skipped <b><%= result.skipped %></b>.<% if (result.errors.length) { %><ul><% result.errors.forEach(function(e){ %><li><%= e %></li><% }) %></ul><% } %></div><% } %>
+  <div class="grid2">
+    <form method="post" action="/admin/import" class="card form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <h2>Import schemes (JSON)</h2>
+      <p class="muted small">Paste a JSON array. Each object uses the same fields as the export (<code>slug, name, level, state_codes, districts, rules, benefits, documents, official_url, source_url …</code>). Imported records always enter the <b>verification queue</b> — they are never published as verified automatically.</p>
+      <textarea name="payload" rows="14" class="mono" required placeholder='[{"slug":"example","name":"Example scheme","level":"state","state_codes":["GA"],"rules":{"all":[{"field":"age","op":"gte","value":18}]}}]'></textarea>
+      <label>When a slug already exists
+        <select name="mode"><option value="insert">Skip it</option><option value="update">Update it (sends back to review)</option></select>
+      </label>
+      <button class="btn">Import</button>
+      <% if (user.role !== 'admin') { %><p class="muted small">Only admins can import.</p><% } %>
+    </form>
+    <div class="card">
+      <h2>Export</h2>
+      <p>Download the full catalogue, including drafts and verification metadata, for backup or bulk editing.</p>
+      <a class="btn" href="/admin/export.json">Download schemes.json</a>
+      <h3>Research workflow for schemes without an API</h3>
+      <ol class="small">
+        <li>Find the scheme on <a href="https://www.myscheme.gov.in" target="_blank" rel="noopener">myScheme</a> or the state/ministry portal.</li>
+        <li>Open the official guideline / notification PDF and note the exact eligibility, benefit and documents.</li>
+        <li>Create it here (or import a batch) — it starts as a draft or in the review queue.</li>
+        <li>A second person verifies it against the source and marks it verified.</li>
+      </ol>
+      <h3>Field reference for rules</h3>
+      <p class="small mono"><%= Object.keys(F.FIELDS).join(', ') %></p>
+      <p class="small">Operators: gte, gt, lte, lt, between, eq, neq, in, nin, level_gte, level_lte, is, manual. Groups: <code>{"all":[…]}</code>, <code>{"any":[…]}</code>. Add <code>"falseIsUnknown": true</code> for proxy conditions.</p>
+    </div>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

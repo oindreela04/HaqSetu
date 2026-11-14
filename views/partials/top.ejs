@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="<%= lang %>">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title ? title + ' · HaqSetu' : 'HaqSetu — Your Rights. Your Benefits. One Bridge.' %></title>
+<meta name="description" content="HaqSetu helps every Indian citizen discover Central, State and UT government schemes they may be eligible for — explained simply, with official links.">
+<meta name="csrf-token" content="<%= csrfToken %>">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700;800&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css?v=3">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="/" aria-label="HaqSetu home">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 28 Q20 6 36 28" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><path d="M4 28h32M11 28v-6M20 28v-11M29 28v-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <span><b>HaqSetu</b><small><%= t('tagline') %></small></span>
+    </a>
+    <input type="checkbox" id="navtoggle" class="navtoggle" aria-label="Menu">
+    <label for="navtoggle" class="navbtn" aria-hidden="true"><span></span><span></span><span></span></label>
+    <nav class="nav" aria-label="Main">
+      <a href="/schemes" class="<%= path.startsWith('/schemes') ? 'on' : '' %>"><%= t('nav_schemes') %></a>
+      <a href="/check" class="<%= path === '/check' ? 'on' : '' %>"><%= t('nav_check') %></a>
+      <% if (user) { %>
+        <a href="/dashboard" class="<%= path === '/dashboard' ? 'on' : '' %>"><%= t('nav_dashboard') %></a>
+        <a href="/profile" class="<%= path === '/profile' ? 'on' : '' %>"><%= t('nav_profile') %></a>
+        <% if (['admin','reviewer'].includes(user.role)) { %><a href="/admin" class="<%= path.startsWith('/admin') ? 'on' : '' %>"><%= t('nav_admin') %></a><% } %>
+        <a href="/account" class="<%= path === '/account' ? 'on' : '' %>" title="Account & privacy">⚙︎</a>
+        <form method="post" action="/logout" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="linkbtn"><%= t('nav_logout') %></button></form>
+      <% } else { %>
+        <a href="/login"><%= t('nav_login') %></a>
+        <a href="/register" class="btn btn-sm"><%= t('nav_register') %></a>
+      <% } %>
+      <span class="langs" aria-label="<%= t('lang') %>"><% LANGS.forEach(function(l){ %><a href="/lang/<%= l[0] %>" class="<%= lang === l[0] ? 'on' : '' %>" lang="<%= l[0] %>"><%= l[1] %></a><% }) %></span>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<% if (flash && flash.length) { %><div class="wrap flashes"><% flash.forEach(function(f){ %><div class="flash flash-<%= f.type %>" role="status"><%= f.msg %></div><% }) %></div><% } %>

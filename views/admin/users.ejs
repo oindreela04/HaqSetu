@@ -1,0 +1,11 @@
+<%- include('../partials/top') %>
+<section class="wrap pad">
+  <h1>Users</h1>
+  <%- include('_nav') %>
+  <form class="filters" method="get"><input name="q" value="<%= q %>" placeholder="Search name or email"><button class="btn">Search</button></form>
+  <table class="table"><thead><tr><th>Name</th><th>Email</th><th>Joined</th><th>Role</th></tr></thead><tbody>
+  <% rows.forEach(function(u){ %><tr><td><%= u.name %></td><td><%= u.email %> <%= u.email_verified_at ? '✔' : '' %></td><td><%= new Date(u.created_at).toISOString().slice(0,10) %></td>
+    <td><form method="post" action="/admin/users/<%= u.id %>/role" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><select name="role"><% ['citizen','reviewer','admin'].forEach(function(r){ %><option <%= u.role===r?'selected':'' %>><%= r %></option><% }) %></select> <button class="btn btn-sm btn-ghost">Set</button></form></td></tr><% }) %>
+  </tbody></table>
+</section>
+<%- include('../partials/bottom') %>
