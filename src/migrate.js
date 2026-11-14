@@ -128,6 +128,8 @@ CREATE INDEX IF NOT EXISTS schemes_search_idx ON schemes USING GIN (search);
 CREATE INDEX IF NOT EXISTS schemes_states_idx ON schemes USING GIN (state_codes);
 CREATE INDEX IF NOT EXISTS schemes_level_idx ON schemes (level, status);
 
+ALTER TABLE schemes ADD COLUMN IF NOT EXISTS seed_hash TEXT;
+
 CREATE TABLE IF NOT EXISTS scheme_revisions (
   id SERIAL PRIMARY KEY,
   scheme_id INT NOT NULL REFERENCES schemes(id) ON DELETE CASCADE,

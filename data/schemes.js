@@ -157,7 +157,7 @@ module.exports = [
     benefits: 'Subsidy of ₹30,000 per kW up to 2 kW and ₹18,000 for the 3rd kW, capped at ₹78,000.', benefit_amount: 'Up to ₹78,000',
     documents: ['Electricity bill', 'Proof of house ownership', 'Bank account'],
     application_process: 'Register on pmsuryaghar.gov.in, select a registered vendor, install and apply for net-metering; subsidy is credited after inspection.', application_mode: 'Online',
-    official_url: 'https://pmsuryaghar.gov.in', apply_url: 'https://pmsuryaghar.gov.in', source_url: 'https://pmsuryaghar.gov.in', source_reference: 'pmsuryaghar.gov.in', ...common,
+    official_url: 'https://pmsuryaghar.gov.in', apply_url: 'https://pmsuryaghar.gov.in/consumerLogin', source_url: 'https://pmsuryaghar.gov.in', source_reference: 'pmsuryaghar.gov.in', ...common,
   },
 
   // ───────────────────────── CENTRAL: Insurance, pension, banking ─────────────────────────
@@ -305,7 +305,7 @@ module.exports = [
     documents: ['Aadhaar', 'Educational certificates', 'Bank account'],
     application_process: 'Register and apply on the PM Internship portal during open rounds.', application_mode: 'Online',
     deadline_note: 'Applications open in rounds — check the portal for the current round.',
-    official_url: 'https://pminternship.mca.gov.in', apply_url: 'https://pminternship.mca.gov.in', source_url: 'https://pminternship.mca.gov.in', source_reference: 'pminternship.mca.gov.in', ...common,
+    official_url: 'https://www.myscheme.gov.in/search?q=PM%20Internship%20Scheme', apply_url: '', source_url: 'https://www.myscheme.gov.in/search?q=PM%20Internship%20Scheme', source_reference: 'pminternship.mca.gov.in', ...common,
   },
 
   // ───────────────────────── CENTRAL: Entrepreneurs ─────────────────────────
@@ -320,7 +320,7 @@ module.exports = [
     benefits: 'Shishu (up to ₹50,000), Kishore (₹50,000–₹5 lakh), Tarun (₹5–10 lakh), Tarun Plus (₹10–20 lakh for those who repaid a Tarun loan).', benefit_amount: 'Loans up to ₹20 lakh',
     documents: ['ID & address proof', 'Business plan / quotation', 'Category certificate (if any)'],
     application_process: 'Apply at any bank, MFI or NBFC, or through the Udyamimitra / JanSamarth portal.', application_mode: 'Bank / Online',
-    official_url: 'https://www.mudra.org.in', apply_url: 'https://www.jansamarth.in', source_url: 'https://www.mudra.org.in', source_reference: 'mudra.org.in; Union Budget 2024-25 (Tarun Plus)', ...common,
+    official_url: 'https://www.mudra.org.in', apply_url: 'https://www.jansamarth.in/business-loan-pradhan-mantri-mudra-yojana-scheme', source_url: 'https://www.mudra.org.in', source_reference: 'mudra.org.in; Union Budget 2024-25 (Tarun Plus)', ...common,
   },
   {
     slug: 'pmegp', name: 'Prime Minister’s Employment Generation Programme (PMEGP)', level: 'central',

@@ -49,10 +49,10 @@ test('public pages render', async () => {
 });
 
 test('state filter on browse page shows only that state + central', async () => {
-  const r = await request(app).get('/api/schemes?state=MH');
-  const codes = r.body.schemes.flatMap((s) => s.state_codes);
-  assert.ok(codes.includes('MH'));
-  assert.ok(!codes.includes('WB'));
+  const r = await request(app).get('/schemes?state=MH');
+  assert.match(r.text, /Ladki Bahin/);
+  assert.doesNotMatch(r.text, /Annapurna Bhandar|Kanyashree/);
+  assert.equal((await request(app).get('/api/schemes')).status, 404);
 });
 
 test('POST without CSRF token is rejected', async () => {
@@ -227,4 +227,25 @@ test('anonymous quick check returns three groups', async () => {
   assert.equal(r.status, 200);
   assert.match(r.text, /Old Age Pension/);
   assert.match(r.text, /myScheme listing for Tamil Nadu/);
+});
+
+test('voice API fails gracefully when the voice service is down, and saves need server-side confirmation', async () => {
+  const caps = await request(app).get('/voice-api/capabilities');
+  assert.equal(caps.status, 503);
+  assert.equal(caps.body.fallback, 'text');
+  assert.equal((await request(app).get('/voice')).status, 200);
+  const { agent } = await register('voicer@example.com');
+  const csrf = csrfOf((await agent.get('/voice')).text);
+  const r = await agent.post('/voice-api/save-profile').set('x-csrf-token', csrf).send({ updates: { age: 99 } });
+  assert.equal(r.status, 409, 'browser cannot push profile changes without a confirmed voice save');
+});
+
+test('catalogue updates shipped in code refresh untouched rows but never admin-edited ones', async () => {
+  const { seedSchemes } = require('../src/seed');
+  await db.query(`UPDATE schemes SET seed_hash = 'stale', benefit_amount = 'old' WHERE slug = 'pmjdy'`);
+  await db.query(`UPDATE schemes SET seed_hash = 'stale', benefit_amount = 'admin text', updated_by = (SELECT id FROM users WHERE email = 'admin@example.com') WHERE slug = 'pmsby'`);
+  const r = await seedSchemes();
+  assert.ok(r.updated >= 1);
+  assert.notEqual((await db.one(`SELECT benefit_amount FROM schemes WHERE slug = 'pmjdy'`)).benefit_amount, 'old');
+  assert.equal((await db.one(`SELECT benefit_amount FROM schemes WHERE slug = 'pmsby'`)).benefit_amount, 'admin text');
 });

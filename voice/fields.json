@@ -1,0 +1,443 @@
+{
+ "FIELDS": {
+  "age": {
+   "label": "Age",
+   "type": "number",
+   "unit": "years"
+  },
+  "gender": {
+   "label": "Gender",
+   "type": "enum",
+   "options": [
+    [
+     "female",
+     "Female"
+    ],
+    [
+     "male",
+     "Male"
+    ],
+    [
+     "transgender",
+     "Transgender"
+    ],
+    [
+     "prefer_not",
+     "Prefer not to say"
+    ]
+   ]
+  },
+  "residence": {
+   "label": "Rural / Urban",
+   "type": "enum",
+   "options": [
+    [
+     "rural",
+     "Rural (village)"
+    ],
+    [
+     "urban",
+     "Urban (town/city)"
+    ]
+   ]
+  },
+  "education": {
+   "label": "Education level",
+   "type": "enum",
+   "options": [
+    [
+     "none",
+     "No formal schooling"
+    ],
+    [
+     "primary",
+     "Primary (Class 1–5)"
+    ],
+    [
+     "middle",
+     "Middle (Class 6–8)"
+    ],
+    [
+     "secondary",
+     "Secondary (Class 9–10)"
+    ],
+    [
+     "higher_secondary",
+     "Higher Secondary (Class 11–12)"
+    ],
+    [
+     "diploma",
+     "Diploma / ITI"
+    ],
+    [
+     "undergraduate",
+     "Undergraduate (pursuing or completed)"
+    ],
+    [
+     "postgraduate",
+     "Postgraduate"
+    ],
+    [
+     "doctorate",
+     "PhD / Doctorate"
+    ]
+   ],
+   "ordered": true
+  },
+  "employment": {
+   "label": "Employment status",
+   "type": "enum",
+   "options": [
+    [
+     "student",
+     "Student"
+    ],
+    [
+     "unemployed",
+     "Unemployed / looking for work"
+    ],
+    [
+     "self_employed",
+     "Self-employed / own business"
+    ],
+    [
+     "salaried_private",
+     "Salaried (private sector)"
+    ],
+    [
+     "salaried_govt",
+     "Salaried (government / PSU)"
+    ],
+    [
+     "daily_wage",
+     "Daily wage / casual labour"
+    ],
+    [
+     "homemaker",
+     "Homemaker"
+    ],
+    [
+     "retired",
+     "Retired"
+    ]
+   ]
+  },
+  "occupation": {
+   "label": "Occupation",
+   "type": "enum",
+   "options": [
+    [
+     "farmer",
+     "Farmer / cultivator"
+    ],
+    [
+     "agri_labourer",
+     "Agricultural labourer"
+    ],
+    [
+     "fisher",
+     "Fisher"
+    ],
+    [
+     "artisan",
+     "Artisan / craftsperson"
+    ],
+    [
+     "street_vendor",
+     "Street vendor"
+    ],
+    [
+     "construction_worker",
+     "Construction worker"
+    ],
+    [
+     "domestic_worker",
+     "Domestic worker"
+    ],
+    [
+     "shopkeeper",
+     "Shopkeeper / small trader"
+    ],
+    [
+     "driver",
+     "Driver / transport worker"
+    ],
+    [
+     "professional",
+     "Professional (doctor, lawyer, engineer, CA…)"
+    ],
+    [
+     "office_worker",
+     "Office / clerical work"
+    ],
+    [
+     "other",
+     "Other"
+    ],
+    [
+     "none",
+     "None"
+    ]
+   ]
+  },
+  "annual_income": {
+   "label": "Annual household income",
+   "type": "number",
+   "unit": "₹"
+  },
+  "monthly_income": {
+   "label": "Monthly personal income",
+   "type": "number",
+   "unit": "₹",
+   "derived": true
+  },
+  "family_size": {
+   "label": "Family size",
+   "type": "number"
+  },
+  "social_category": {
+   "label": "Social category",
+   "type": "enum",
+   "options": [
+    [
+     "general",
+     "General"
+    ],
+    [
+     "obc",
+     "OBC"
+    ],
+    [
+     "sc",
+     "SC"
+    ],
+    [
+     "st",
+     "ST"
+    ],
+    [
+     "ews",
+     "EWS"
+    ],
+    [
+     "prefer_not",
+     "Prefer not to say"
+    ]
+   ]
+  },
+  "marital_status": {
+   "label": "Marital status",
+   "type": "enum",
+   "options": [
+    [
+     "unmarried",
+     "Unmarried"
+    ],
+    [
+     "married",
+     "Married"
+    ],
+    [
+     "widowed",
+     "Widowed"
+    ],
+    [
+     "divorced",
+     "Divorced / separated"
+    ],
+    [
+     "prefer_not",
+     "Prefer not to say"
+    ]
+   ]
+  },
+  "disability_percent": {
+   "label": "Disability percentage (certificate)",
+   "type": "number",
+   "unit": "%"
+  },
+  "class12_percent": {
+   "label": "Class 12 marks",
+   "type": "number",
+   "unit": "%"
+  },
+  "last_exam_percent": {
+   "label": "Marks in last exam",
+   "type": "number",
+   "unit": "%"
+  },
+  "is_farmer_landholder": {
+   "label": "My family owns or cultivates agricultural land",
+   "type": "bool"
+  },
+  "land_upto_2ha": {
+   "label": "Our cultivable land is 2 hectares (≈5 acres) or less",
+   "type": "bool"
+  },
+  "is_bpl": {
+   "label": "We have a BPL / Antyodaya / priority household ration card",
+   "type": "bool"
+  },
+  "has_ration_card": {
+   "label": "We have a ration card (any type)",
+   "type": "bool"
+  },
+  "owns_pucca_house": {
+   "label": "My family owns a pucca (permanent) house",
+   "type": "bool"
+  },
+  "has_lpg_connection": {
+   "label": "My household already has an LPG connection",
+   "type": "bool"
+  },
+  "has_bank_account": {
+   "label": "I have a bank or post-office savings account",
+   "type": "bool"
+  },
+  "is_income_tax_payer": {
+   "label": "I (or my family) pay income tax",
+   "type": "bool"
+  },
+  "is_govt_employee_family": {
+   "label": "Someone in my family is a government employee",
+   "type": "bool"
+  },
+  "has_epf_esic_nps": {
+   "label": "I am covered by EPF / ESIC / NPS",
+   "type": "bool"
+  },
+  "is_minority": {
+   "label": "I belong to a notified minority community",
+   "type": "bool"
+  },
+  "has_disability": {
+   "label": "I have a disability (with or without certificate)",
+   "type": "bool"
+  },
+  "is_pregnant_or_lactating": {
+   "label": "I am pregnant or a breastfeeding mother",
+   "type": "bool"
+  },
+  "has_girl_child_under_10": {
+   "label": "I have a daughter below 10 years of age",
+   "type": "bool"
+  },
+  "studied_govt_school_6_12": {
+   "label": "I studied Class 6–12 in a government school",
+   "type": "bool"
+  },
+  "is_head_of_family": {
+   "label": "I am the head of my family (as per ration card)",
+   "type": "bool"
+  },
+  "is_unorganised_worker": {
+   "label": "I work in the unorganised / informal sector",
+   "type": "bool"
+  },
+  "owns_house_roof": {
+   "label": "My family owns a house with a usable roof (for solar)",
+   "type": "bool"
+  },
+  "is_enrolled_in_education": {
+   "label": "I am currently enrolled in school / college",
+   "type": "bool"
+  },
+  "has_existing_enterprise": {
+   "label": "I already run a business / enterprise",
+   "type": "bool"
+  }
+ },
+ "EDU_ORDER": [
+  "none",
+  "primary",
+  "middle",
+  "secondary",
+  "higher_secondary",
+  "diploma",
+  "undergraduate",
+  "postgraduate",
+  "doctorate"
+ ],
+ "FLAGS": [
+  [
+   "is_farmer_landholder",
+   "My family owns or cultivates agricultural land"
+  ],
+  [
+   "land_upto_2ha",
+   "Our cultivable land is 2 hectares (≈5 acres) or less"
+  ],
+  [
+   "is_bpl",
+   "We have a BPL / Antyodaya / priority household ration card"
+  ],
+  [
+   "has_ration_card",
+   "We have a ration card (any type)"
+  ],
+  [
+   "owns_pucca_house",
+   "My family owns a pucca (permanent) house"
+  ],
+  [
+   "has_lpg_connection",
+   "My household already has an LPG connection"
+  ],
+  [
+   "has_bank_account",
+   "I have a bank or post-office savings account"
+  ],
+  [
+   "is_income_tax_payer",
+   "I (or my family) pay income tax"
+  ],
+  [
+   "is_govt_employee_family",
+   "Someone in my family is a government employee"
+  ],
+  [
+   "has_epf_esic_nps",
+   "I am covered by EPF / ESIC / NPS"
+  ],
+  [
+   "is_minority",
+   "I belong to a notified minority community"
+  ],
+  [
+   "has_disability",
+   "I have a disability (with or without certificate)"
+  ],
+  [
+   "is_pregnant_or_lactating",
+   "I am pregnant or a breastfeeding mother"
+  ],
+  [
+   "has_girl_child_under_10",
+   "I have a daughter below 10 years of age"
+  ],
+  [
+   "studied_govt_school_6_12",
+   "I studied Class 6–12 in a government school"
+  ],
+  [
+   "is_head_of_family",
+   "I am the head of my family (as per ration card)"
+  ],
+  [
+   "is_unorganised_worker",
+   "I work in the unorganised / informal sector"
+  ],
+  [
+   "owns_house_roof",
+   "My family owns a house with a usable roof (for solar)"
+  ],
+  [
+   "is_enrolled_in_education",
+   "I am currently enrolled in school / college"
+  ],
+  [
+   "has_existing_enterprise",
+   "I already run a business / enterprise"
+  ]
+ ]
+}

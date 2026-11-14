@@ -14,7 +14,7 @@
   <p class="lead">We checked <b><%= results.total %></b> schemes for <%= stateRow ? stateRow.name : 'all of India (choose a state to include state schemes)' %>.
     <a href="/register">Create a free account</a> to save these results, track applications and get updates when your situation changes.</p>
   <%- include('partials/results', { results: results, showActions: false, tab: 'eligible' }) %>
-  <% if (myschemeLink) { %><p class="muted small">Looking for more <%= stateRow.name %> schemes? Also search the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</p><% } %>
+  <% if (myschemeLink) { %><p class="muted small">Looking for more <%= stateRow.name %> schemes? Also search the official <a href="<%= myschemeLink %>" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</p><% } %>
   <p><a class="btn btn-ghost" href="/check">Start again</a></p>
 <% } %>
 </section>

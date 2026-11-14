@@ -10,7 +10,7 @@
       · <b>Status:</b> <%= s.status %>
       <% if (s.last_verified_at) { %> · last verified <%= new Date(s.last_verified_at).toISOString().slice(0,10) %><% } %>
       <% if (s.verification_notes) { %><p class="muted small">Notes: <%= s.verification_notes %></p><% } %>
-      <p class="small"><a href="/schemes/<%= s.slug %>" target="_blank">View public page ↗</a></p>
+      <p class="small"><a href="/schemes/<%= s.slug %>">View public page ↗</a></p>
     </div>
     <form method="post" action="/admin/schemes/<%= s.id %>/verify" class="verify-form">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -80,7 +80,7 @@
   </form>
 
   <% if (typeof revisions !== 'undefined' && revisions.length) { %>
-  <div class="card"><h2>Revision history</h2><ul class="plain small"><% revisions.forEach(function(r){ %><li><%= new Date(r.created_at).toISOString().replace('T',' ').slice(0,16) %> — <b><%= r.action %></b> by <%= r.by || 'system' %> <%= r.note ? '— ' + r.note : '' %> · <a href="/admin/revisions/<%= r.id %>" target="_blank">snapshot</a></li><% }) %></ul></div>
+  <div class="card"><h2>Revision history</h2><ul class="plain small"><% revisions.forEach(function(r){ %><li><%= new Date(r.created_at).toISOString().replace('T',' ').slice(0,16) %> — <b><%= r.action %></b> by <%= r.by || 'system' %> <%= r.note ? '— ' + r.note : '' %> · <a href="/admin/revisions/<%= r.id %>">snapshot</a></li><% }) %></ul></div>
   <% } %>
   <% if (typeof reports !== 'undefined' && reports.length) { %>
   <div class="card"><h2>Citizen reports</h2><ul class="plain small"><% reports.forEach(function(r){ %><li class="<%= r.resolved?'muted':'' %>"><%= new Date(r.created_at).toISOString().slice(0,10) %> — <%= r.message %></li><% }) %></ul></div>

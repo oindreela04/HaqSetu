@@ -25,6 +25,7 @@
     <nav class="nav" aria-label="Main">
       <a href="/schemes" class="<%= path.startsWith('/schemes') ? 'on' : '' %>"><%= t('nav_schemes') %></a>
       <a href="/check" class="<%= path === '/check' ? 'on' : '' %>"><%= t('nav_check') %></a>
+      <a href="/voice" class="<%= path === '/voice' ? 'on' : '' %>">🎤 <%= t('nav_voice') %></a>
       <% if (user) { %>
         <a href="/dashboard" class="<%= path === '/dashboard' ? 'on' : '' %>"><%= t('nav_dashboard') %></a>
         <a href="/profile" class="<%= path === '/profile' ? 'on' : '' %>"><%= t('nav_profile') %></a>

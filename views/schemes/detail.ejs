@@ -12,8 +12,9 @@
     </div>
     <div class="detail-cta">
       <% if (s.benefit_amount) { %><p class="amount big"><%= s.benefit_amount %></p><% } %>
-      <% if (s.apply_url) { %><a class="btn btn-lg" href="<%= s.apply_url %>" target="_blank" rel="noopener nofollow"><%= t('apply') %> ↗</a><% } %>
-      <% if (s.official_url) { %><a class="btn btn-ghost" href="<%= s.official_url %>" target="_blank" rel="noopener nofollow"><%= t('official_site') %> ↗</a><% } %>
+      <% if (s.apply_url) { %><a class="btn btn-lg" href="<%= s.apply_url %>" rel="noopener nofollow"><%= t('apply') %> ↗</a><% } %>
+      <% if (s.official_url) { %><a class="btn btn-ghost" href="<%= s.official_url %>" rel="noopener nofollow"><%= t('official_site') %> ↗</a>
+      <p class="small muted url-text">Official site: <a href="<%= s.official_url %>" rel="noopener nofollow"><%= s.official_url.replace(/^https?:\/\//,'').replace(/\/$/,'') %></a></p><% } %>
     </div>
   </div>
 
@@ -23,7 +24,7 @@
     <% } else { %>
       ⚠ This information was compiled from official portals but <b>has not yet been verified</b> by a HaqSetu reviewer. Always confirm details on the official website before applying.
     <% } %>
-    <% if (s.source_url) { %> Source: <a href="<%= s.source_url %>" target="_blank" rel="noopener nofollow"><%= s.source_reference || s.source_url %></a><% } %>
+    <% if (s.source_url) { %> Source: <a href="<%= s.source_url %>" rel="noopener nofollow"><%= s.source_reference || s.source_url %></a><% } %>
   </div>
 
   <% if (evaluation) { %>

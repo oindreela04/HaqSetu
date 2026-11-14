@@ -7,6 +7,7 @@
       <p class="lead"><%= t('hero_sub') %></p>
       <div class="cta-row">
         <a class="btn btn-lg" href="/check"><%= t('cta_check') %></a>
+        <a class="btn btn-lg btn-ghost" href="/voice">🎤 <%= t('cta_voice') %></a>
         <a class="btn btn-lg btn-ghost" href="<%= user ? '/dashboard' : '/register' %>"><%= user ? t('nav_dashboard') : t('cta_register') %></a>
       </div>
       <form class="search" action="/schemes" method="get" role="search">

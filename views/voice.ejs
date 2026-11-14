@@ -1,0 +1,7 @@
+<%- include('partials/top') %>
+<link rel="stylesheet" href="/static/voice-app/voice.css?v=1">
+<section class="wrap pad">
+  <div id="voice-root" data-lang="<%= lang %>" data-logged-in="<%= user ? 'true' : 'false' %>"><noscript>The voice assistant needs JavaScript. You can use the <a href="/check">quick eligibility check</a> instead.</noscript></div>
+</section>
+<script type="module" src="/static/voice-app/voice.js?v=1"></script>
+<%- include('partials/bottom') %>

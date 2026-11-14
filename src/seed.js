@@ -36,25 +36,34 @@ function schemeValues(s) {
   });
 }
 
-/** Insert seed schemes that don't exist yet (by slug). Never overwrites admin edits. */
+/**
+ * Sync seed schemes from data/schemes.js:
+ *  - new slugs are inserted;
+ *  - existing rows that have never been edited by a person (updated_by IS NULL) are refreshed
+ *    when the seed record changes, so catalogue updates shipped in code reach every deployment;
+ *  - rows edited by admins/reviewers are never overwritten.
+ */
 async function seedSchemes() {
+  const crypto = require('crypto');
   const schemes = require(path.join(__dirname, '..', 'data', 'schemes.js'));
   let added = 0;
+  let updated = 0;
   for (const s of schemes) {
-    const placeholders = SCHEME_COLUMNS.map((_, i) => `$${i + 1}`).join(',');
-    const r = await db.query(
-      `INSERT INTO schemes (${SCHEME_COLUMNS.join(',')}) VALUES (${placeholders}) ON CONFLICT (slug) DO NOTHING RETURNING id`,
-      schemeValues(s)
-    );
-    if (r.rowCount) {
+    const hash = crypto.createHash('sha256').update(JSON.stringify(s)).digest('hex').slice(0, 32);
+    const vals = schemeValues(s);
+    const existing = await db.one('SELECT id, updated_by, seed_hash FROM schemes WHERE slug = $1', [s.slug]);
+    if (!existing) {
+      const placeholders = SCHEME_COLUMNS.map((_, i) => `$${i + 1}`).join(',');
+      const r = await db.one(`INSERT INTO schemes (${SCHEME_COLUMNS.join(',')}, seed_hash) VALUES (${placeholders}, $${SCHEME_COLUMNS.length + 1}) RETURNING id`, [...vals, hash]);
       added++;
-      await db.query(
-        `INSERT INTO scheme_revisions (scheme_id, action, note, snapshot) VALUES ($1,'seed','Initial seed',$2)`,
-        [r.rows[0].id, JSON.stringify(s)]
-      );
+      await db.query(`INSERT INTO scheme_revisions (scheme_id, action, note, snapshot) VALUES ($1,'seed','Initial seed',$2)`, [r.id, JSON.stringify(s)]);
+    } else if (!existing.updated_by && existing.seed_hash !== hash) {
+      await db.query(`UPDATE schemes SET ${SCHEME_COLUMNS.map((c, i) => `${c} = $${i + 1}`).join(', ')}, seed_hash = $${SCHEME_COLUMNS.length + 1}, updated_at = now() WHERE id = $${SCHEME_COLUMNS.length + 2}`, [...vals, hash, existing.id]);
+      updated++;
+      await db.query(`INSERT INTO scheme_revisions (scheme_id, action, note, snapshot) VALUES ($1,'seed-update','Catalogue update shipped in code',$2)`, [existing.id, JSON.stringify(s)]);
     }
   }
-  return added;
+  return { added, updated };
 }
 
 /** Promote configured admin emails (comma-separated ADMIN_EMAILS). */
@@ -67,9 +76,9 @@ async function promoteAdmins() {
 async function seedAll() {
   await migrate();
   await seedLocations();
-  const added = await seedSchemes();
+  const { added, updated } = await seedSchemes();
   await promoteAdmins();
-  return { added };
+  return { added, updated };
 }
 
 module.exports = { seedAll, seedLocations, seedSchemes, promoteAdmins, SCHEME_COLUMNS, schemeValues };

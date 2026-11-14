@@ -38,7 +38,7 @@
 
     <h2>All results</h2>
     <%- include('../partials/results', { results: results, showActions: true, tab: tab }) %>
-    <% if (myschemeLink) { %><p class="muted small">Also check the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= profile.state_name %></a> for schemes our reviewers haven't added yet.</p><% } %>
+    <% if (myschemeLink) { %><p class="muted small">Also check the official <a href="<%= myschemeLink %>" rel="noopener">myScheme listing for <%= profile.state_name %></a> for schemes our reviewers haven't added yet.</p><% } %>
   <% } %>
   <p class="muted small"><%= t('disclaimer_short') %></p>
 </section>

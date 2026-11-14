@@ -1,0 +1,11 @@
+# GPU host only — not installed on the HaqSetu web service.
+fastapi
+uvicorn
+torch
+torchaudio
+transformers
+sentencepiece
+soundfile
+numpy
+IndicTransToolkit
+git+https://github.com/huggingface/parler-tts.git

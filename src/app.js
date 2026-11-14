@@ -33,6 +33,8 @@ function createApp() {
       },
     },
     crossOriginEmbedderPolicy: false,
+    // Some government portals reject requests without a referrer; send only our origin.
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   }));
   app.use(compression());
   if (process.env.NODE_ENV !== 'test') app.use(morgan(isProd ? 'combined' : 'dev'));
@@ -75,6 +77,7 @@ function createApp() {
   app.use(require('./routes/public'));
   app.use(require('./routes/auth'));
   app.use(require('./routes/account'));
+  app.use(require('./routes/voice'));
   app.use('/admin', require('./routes/admin'));
   app.use('/api', require('./routes/api'));
 

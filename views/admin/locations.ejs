@@ -2,7 +2,7 @@
 <section class="wrap pad">
   <h1>Locations</h1>
   <%- include('_nav') %>
-  <p class="muted">States, UTs, districts and sub-divisions are stored in the database — changes here appear in every form immediately, without code changes. Verify changes against the <a href="https://lgdirectory.gov.in" target="_blank" rel="noopener">Local Government Directory</a>.</p>
+  <p class="muted">States, UTs, districts and sub-divisions are stored in the database — changes here appear in every form immediately, without code changes. Verify changes against the <a href="https://lgdirectory.gov.in" rel="noopener">Local Government Directory</a>.</p>
   <table class="table">
     <thead><tr><th>Code</th><th>Name</th><th>Type</th><th>Districts</th><th>Active</th></tr></thead>
     <tbody><% states.forEach(function(s){ %><tr><td><%= s.code %></td><td><a href="/admin/locations/<%= s.code %>"><%= s.name %></a></td><td><%= s.type %></td><td><%= s.districts %></td><td><%= s.active ? 'yes' : 'no' %></td></tr><% }) %></tbody>

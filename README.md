@@ -10,6 +10,7 @@ A pan-India government scheme discovery platform. Citizens build a simple profil
 - Scheme catalogue with source, verification status and last-verified date on every record
 - Admin / reviewer console: create & edit schemes with a visual rule builder, verification queue (verify with note, needs-update, draft, close, archive), revision history, JSON import/export, citizen error reports, location management, user roles, audit log
 - English / हिन्दी / বাংলা interface
+- **HaqSetu Voice AI** at `/voice`: speak or type in English, Hindi or Bengali (more languages once AI4Bharat models are connected); one question at a time; answers from the real database and eligibility engine; consent-gated profile saving. See [VOICE.md](VOICE.md).
 - Optional AI "explain in simple language" (only rephrases the stored record; it never decides eligibility)
 
 ## Run locally
@@ -18,6 +19,7 @@ npm install
 export DATABASE_URL=postgres://user:pass@localhost:5432/haqsetu
 npm start            # runs migrations + seeds on boot, serves :3000
 npm test             # needs a Postgres database at TEST_DATABASE_URL
+npm run test:voice   # Python voice-service tests (engine parity, NLU, dialogue)
 ```
 
 ## Database modes
@@ -35,6 +37,9 @@ npm test             # needs a Postgres database at TEST_DATABASE_URL
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | Email delivery (verification & password reset) |
 | `ANTHROPIC_API_KEY` | Optional: enables the simple-language explainer |
 | `SHOW_UNVERIFIED` | `false` to show only reviewer-verified schemes publicly |
+
+## Keeping the catalogue current
+Schemes live in `data/schemes.js`. When a new government scheme is added or a rule changes there and the change is pushed, the next deploy inserts new schemes and refreshes existing seed records automatically — except records an admin has edited, which are never overwritten. A weekly scheduled research task proposes additions from official sources (PIB, myScheme, ministry and state portals) as commits; every addition arrives as *awaiting verification*.
 
 ## Data integrity
 Seed schemes were compiled on 14 Nov 2026 from official portals and recent reporting and are marked **awaiting verification** until a reviewer confirms each one against the official notification. Imports can never arrive as verified, and editing a verified record sends it back to the review queue.

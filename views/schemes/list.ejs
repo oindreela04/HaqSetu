@@ -18,7 +18,7 @@
     <button class="btn">Filter</button>
   </form>
   <p class="muted"><%= result.total %> scheme<%= result.total===1?'':'s' %> found<%= stateRow ? ' (Central schemes + ' + stateRow.name + ' schemes)' : '' %>. <% if (!user) { %><a href="/check">Check which ones you qualify for →</a><% } else { %><a href="/dashboard">See your personal matches →</a><% } %></p>
-  <% if (stateRow && myschemeLink) { %><div class="note">Our reviewers are adding verified <%= stateRow.name %> schemes. You can also browse the official <a href="<%= myschemeLink %>" target="_blank" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</div><% } %>
+  <% if (stateRow && myschemeLink) { %><div class="note">Our reviewers are adding verified <%= stateRow.name %> schemes. You can also browse the official <a href="<%= myschemeLink %>" rel="noopener">myScheme listing for <%= stateRow.name %></a>.</div><% } %>
   <div class="scheme-grid">
     <% result.rows.forEach(function(s){ %>
       <a class="scheme-card" href="/schemes/<%= s.slug %>">

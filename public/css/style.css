@@ -49,7 +49,7 @@ img, svg { max-width: 100%; }
 .langs a { padding: 4px 8px; font-size: .85rem; }
 .langs a.on { background: #fff; color: var(--teal); }
 .navtoggle, .navbtn { display: none; }
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .navbtn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
   .navbtn span { width: 24px; height: 2px; background: #fff; display: block; }
   .nav { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--teal); flex-direction: column; align-items: stretch; padding: 8px 16px 16px; box-shadow: 0 8px 20px rgba(0,0,0,.2); }

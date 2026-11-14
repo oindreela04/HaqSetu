@@ -3,7 +3,7 @@
 const STR = {
   en: {
     tagline: 'Your Rights. Your Benefits. One Bridge.',
-    nav_schemes: 'Schemes', nav_check: 'Quick check', nav_dashboard: 'My benefits', nav_profile: 'Profile', nav_login: 'Log in', nav_register: 'Create account', nav_logout: 'Log out', nav_admin: 'Admin', nav_about: 'About',
+    nav_schemes: 'Schemes', nav_check: 'Quick check', nav_voice: 'Ask by voice', cta_voice: 'Ask by voice in your language', nav_dashboard: 'My benefits', nav_profile: 'Profile', nav_login: 'Log in', nav_register: 'Create account', nav_logout: 'Log out', nav_admin: 'Admin', nav_about: 'About',
     hero_title: 'Find the government schemes you are entitled to',
     hero_sub: 'Central, state and UT schemes matched to your age, location, income and situation — explained in plain language, with official links to apply.',
     cta_check: 'Check my eligibility — 2 minutes', cta_browse: 'Browse all schemes', cta_register: 'Create a free account',
@@ -15,7 +15,7 @@ const STR = {
   },
   hi: {
     tagline: 'आपके अधिकार। आपके लाभ। एक सेतु।',
-    nav_schemes: 'योजनाएँ', nav_check: 'त्वरित जाँच', nav_dashboard: 'मेरे लाभ', nav_profile: 'प्रोफ़ाइल', nav_login: 'लॉग इन', nav_register: 'खाता बनाएँ', nav_logout: 'लॉग आउट', nav_admin: 'एडमिन', nav_about: 'परिचय',
+    nav_schemes: 'योजनाएँ', nav_check: 'त्वरित जाँच', nav_voice: 'बोलकर पूछें', cta_voice: 'अपनी भाषा में बोलकर पूछें', nav_dashboard: 'मेरे लाभ', nav_profile: 'प्रोफ़ाइल', nav_login: 'लॉग इन', nav_register: 'खाता बनाएँ', nav_logout: 'लॉग आउट', nav_admin: 'एडमिन', nav_about: 'परिचय',
     hero_title: 'जानिए आप किन सरकारी योजनाओं के हकदार हैं',
     hero_sub: 'केंद्र, राज्य और केंद्रशासित प्रदेशों की योजनाएँ — आपकी उम्र, स्थान, आय और स्थिति के अनुसार, सरल भाषा में, आवेदन के आधिकारिक लिंक के साथ।',
     cta_check: 'अपनी पात्रता जाँचें — 2 मिनट', cta_browse: 'सभी योजनाएँ देखें', cta_register: 'मुफ़्त खाता बनाएँ',
@@ -27,7 +27,7 @@ const STR = {
   },
   bn: {
     tagline: 'আপনার অধিকার। আপনার সুবিধা। এক সেতু।',
-    nav_schemes: 'প্রকল্প', nav_check: 'দ্রুত যাচাই', nav_dashboard: 'আমার সুবিধা', nav_profile: 'প্রোফাইল', nav_login: 'লগ ইন', nav_register: 'অ্যাকাউন্ট খুলুন', nav_logout: 'লগ আউট', nav_admin: 'অ্যাডমিন', nav_about: 'পরিচিতি',
+    nav_schemes: 'প্রকল্প', nav_check: 'দ্রুত যাচাই', nav_voice: 'বলে জিজ্ঞাসা', cta_voice: 'নিজের ভাষায় বলে জিজ্ঞাসা করুন', nav_dashboard: 'আমার সুবিধা', nav_profile: 'প্রোফাইল', nav_login: 'লগ ইন', nav_register: 'অ্যাকাউন্ট খুলুন', nav_logout: 'লগ আউট', nav_admin: 'অ্যাডমিন', nav_about: 'পরিচিতি',
     hero_title: 'আপনি কোন সরকারি প্রকল্পের যোগ্য তা জানুন',
     hero_sub: 'কেন্দ্র, রাজ্য ও কেন্দ্রশাসিত অঞ্চলের প্রকল্প — আপনার বয়স, এলাকা, আয় ও পরিস্থিতি অনুযায়ী, সহজ ভাষায়, আবেদনের সরকারি লিঙ্ক সহ।',
     cta_check: 'যোগ্যতা যাচাই করুন — ২ মিনিট', cta_browse: 'সব প্রকল্প দেখুন', cta_register: 'বিনামূল্যে অ্যাকাউন্ট খুলুন',

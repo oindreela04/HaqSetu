@@ -17,15 +17,4 @@ router.get('/districts', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// Public read-only scheme listing (open data)
-router.get('/schemes', async (req, res, next) => {
-  try {
-    const r = await svc.searchSchemes({
-      q: String(req.query.q || '').slice(0, 100), state: /^[A-Z]{2,4}$/.test(req.query.state || '') ? req.query.state : '',
-      level: String(req.query.level || ''), category: String(req.query.category || ''), page: Number(req.query.page) || 1, perPage: 50,
-    });
-    res.json({ total: r.total, page: r.page, pages: r.pages, schemes: r.rows });
-  } catch (e) { next(e); }
-});
-
 module.exports = router;
