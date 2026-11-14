@@ -142,42 +142,6 @@ The JavaScript and Python eligibility engines are **parity-tested** against each
 
 Optional upgrades are wired in and switch on with environment variables: **AI4Bharat** IndicConformer (speech recognition), IndicTrans2 (translation for 10 more Indian languages) and Indic Parler-TTS (natural Indic voices) via a GPU inference server, plus an LLM for free-form understanding. See [VOICE.md](VOICE.md) for architecture, costs and rollout steps.
 
-## 🚀 Run it locally
-
-```bash
-git clone https://github.com/oindreela04/HaqSetu.git
-cd HaqSetu
-npm install                 # also builds the voice UI and installs the Python voice deps
-npm start                   # http://localhost:3000
-```
-
-No database? No problem — without `DATABASE_URL` HaqSetu starts its own private PostgreSQL automatically (data resets on restart). For anything permanent, point it at a real one:
-
-```bash
-export DATABASE_URL=postgres://user:pass@localhost:5432/haqsetu
-npm start
-```
-
-Run the tests:
-
-```bash
-npm test               # web app: auth, matching, location rules, admin, privacy
-npm run test:voice     # voice service: engine parity, language extraction, conversations
-```
-
-### Configuration
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string (recommended for production) |
-| `SESSION_SECRET` | Long random string — **required** in production |
-| `ADMIN_EMAILS` | Comma-separated emails that get admin access when they sign up |
-| `SITE_URL` | Public URL, used in email links |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | Email delivery for verification and password reset |
-| `SHOW_UNVERIFIED` | Set `false` to show only reviewer-verified schemes |
-| `AI4B_ASR_URL`, `AI4B_TRANSLATE_URL`, `AI4B_TTS_URL` | Optional AI4Bharat model endpoints for the voice assistant |
-| `ANTHROPIC_API_KEY` | Optional LLM for free-form voice understanding and plain-language explanations |
-
 ## 🗂️ Project structure
 
 ```
