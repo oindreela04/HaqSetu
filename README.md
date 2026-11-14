@@ -1,47 +1,195 @@
-# HaqSetu — Your Rights. Your Benefits. One Bridge.
+<div align="center">
 
-A pan-India government scheme discovery platform. Citizens build a simple profile (no Aadhaar, no bank details) and a deterministic, explainable rules engine matches them against Central, State, UT and District schemes, grouped as **Potentially eligible**, **More information required** and **Not currently eligible**, with reasons for each.
+# 🌉 HaqSetu
 
-## Features
-- All 28 states + 8 UTs with 778 districts (admin-editable, plus sub-divisions)
-- Secure accounts: bcrypt hashing, server-side Postgres sessions, CSRF tokens, rate limiting, account lockout, email verification, password reset, data export, account deletion, consent settings
-- Guided onboarding & editable profile; anonymous quick check (nothing stored)
-- **Missed Benefits Detector**: compares the profile against every active scheme for the user's state + Centre, and ranks which missing answers would unlock the most schemes
-- Scheme catalogue with source, verification status and last-verified date on every record
-- Admin / reviewer console: create & edit schemes with a visual rule builder, verification queue (verify with note, needs-update, draft, close, archive), revision history, JSON import/export, citizen error reports, location management, user roles, audit log
-- English / हिन्दी / বাংলা interface
-- **HaqSetu Voice AI** at `/voice`: speak or type in English, Hindi or Bengali (more languages once AI4Bharat models are connected); one question at a time; answers from the real database and eligibility engine; consent-gated profile saving. See [VOICE.md](VOICE.md).
-- Optional AI "explain in simple language" (only rephrases the stored record; it never decides eligibility)
+### Your Rights. Your Benefits. One Bridge.
 
-## Run locally
-```bash
-npm install
-export DATABASE_URL=postgres://user:pass@localhost:5432/haqsetu
-npm start            # runs migrations + seeds on boot, serves :3000
-npm test             # needs a Postgres database at TEST_DATABASE_URL
-npm run test:voice   # Python voice-service tests (engine parity, NLU, dialogue)
+**Find every government scheme you're entitled to — Central, State, UT and District — explained in plain language, in your language, with official links to apply.**
+
+[**🚀 Try it live → haqsetu.onrender.com**](https://haqsetu.onrender.com)
+
+[![Live](https://img.shields.io/badge/live-haqsetu.onrender.com-0e5a4b?style=for-the-badge)](https://haqsetu.onrender.com)
+![States](https://img.shields.io/badge/coverage-36%20states%20%26%20UTs-e39b2d?style=for-the-badge)
+![Languages](https://img.shields.io/badge/languages-English%20%7C%20हिन्दी%20%7C%20বাংলা-1d4b8f?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-555?style=for-the-badge)
+
+<img src="docs/screenshots/home.png" alt="HaqSetu home page" width="900">
+
+</div>
+
+---
+
+## The problem
+
+India runs **thousands** of welfare schemes — pensions, scholarships, crop insurance, housing grants, maternity benefits, business loans. Many of the people they're meant for never claim them. Not because they aren't eligible, but because:
+
+- 📜 eligibility rules are buried in PDFs and gazette notifications,
+- 🗺️ every state runs its own schemes on its own portal,
+- 🔤 most information exists only in English or one state language,
+- 🤷 nobody tells you about the scheme you *didn't know to search for*.
+
+**HaqSetu** (*haq* = right, *setu* = bridge) closes that gap. Tell it a little about yourself — where you live, your age, your work, your family income — and it checks you against every active scheme that applies to your location, then tells you exactly *why* each one does or doesn't fit.
+
+## ✨ What it does
+
+### 🔎 Missed Benefits Detector
+Most people only find schemes they already know about. HaqSetu proactively compares your profile with **every** active Central + State scheme for your location and surfaces the ones you haven't claimed. It also tells you which single unanswered question would unlock the most additional schemes.
+
+<img src="docs/screenshots/dashboard.png" alt="Dashboard with Missed Benefits" width="900">
+
+### ⚖️ Explainable eligibility — never a black box
+Every scheme lands in one of three buckets:
+
+| | Status | Meaning |
+|---|---|---|
+| 🟢 | **Potentially eligible** | Your details satisfy every known rule |
+| 🟡 | **More information required** | One or two answers are missing — we tell you which |
+| 🔴 | **Not currently eligible** | A required condition isn't met — we tell you which one |
+
+Each result shows ✓ conditions met, ? conditions unknown, ✕ conditions not met, plus the documents you'll need and the official link to apply. Decisions come from a **deterministic rules engine**, never from a language model, and HaqSetu never promises approval — the government department always decides.
+
+<img src="docs/screenshots/scheme.png" alt="Scheme detail page" width="900">
+
+### 🎤 HaqSetu Voice — ask out loud, in your language
+Not everyone is comfortable filling in forms. At [`/voice`](https://haqsetu.onrender.com/voice) citizens can simply **speak** (or type) in English, Hindi — including Hinglish — or Bengali:
+
+> *"I am a farmer from Bihar. My family income is below two lakh rupees. What government schemes can I get?"*
+
+The assistant pulls out what it heard (state, occupation, income), asks **one follow-up question at a time**, searches the real scheme database, runs the same eligibility engine, and reads the answer back aloud — with result cards, documents and official links on screen. You can correct the transcript before sending, stop/replay/mute audio, or switch to text-only. Nothing is saved to your profile unless you explicitly say yes.
+
+<img src="docs/screenshots/voice.png" alt="Voice assistant conversation" width="900">
+
+### 📍 Truly pan-India
+- All **28 states and 8 Union Territories**, with **778 districts** in the database
+- A West Bengal citizen sees Central + West Bengal schemes; a Maharashtra citizen sees Central + Maharashtra schemes. A state-only scheme is **never** shown to residents of another state.
+- District-level schemes are supported, and admins can add districts and sub-divisions from the dashboard — no code changes needed.
+
+### 🧭 And everything else a real public service needs
+- **2-minute quick check** — no account required, nothing stored
+- **Secure accounts** — bcrypt hashing, server-side sessions, CSRF protection, rate limiting, lockout after repeated failures, email verification and password reset
+- **Privacy by design** — never asks for Aadhaar, bank details or OTPs; download-my-data and one-click account deletion; consent controls for matching and emails
+- **Admin & reviewer console** — visual rule builder, verification queue, revision history, JSON import/export, citizen error reports, location management, roles and a full audit log
+- **Trilingual interface** — English, हिन्दी, বাংলা
+- **Mobile-first** — built for low-end Android phones on patchy connections
+
+<p align="center"><img src="docs/screenshots/mobile-check.png" alt="Quick check on mobile" width="300"></p>
+
+## 🛡️ Trust & data integrity
+
+Welfare information that's wrong is worse than none. HaqSetu is built around that:
+
+- **Every scheme shows its source** and a *last verified* date. Records awaiting human review are clearly labelled.
+- **Imports can never arrive "verified"**; editing a verified record automatically sends it back to the review queue.
+- **Citizens can report outdated information** from any scheme page.
+- **Official links only** — HaqSetu never processes applications and never asks for money.
+- **Kept current** — schemes live in [`data/schemes.js`](data/schemes.js). New and updated schemes ship with each deploy; records that a reviewer has edited are never overwritten. A weekly research job checks official sources (PIB, myScheme, ministry and state portals) for launches, changes and closures.
+
+## 🏗️ How it's built
+
+```
+                 ┌──────────────────────────────────────────────────┐
+  Browser  ───▶  │  Node.js + Express  (EJS pages, React voice UI)  │
+                 │  sessions · CSRF · rate limits · consent checks  │
+                 └───────────────┬───────────────────┬──────────────┘
+                                 │                   │ /voice-api/*
+                                 ▼                   ▼
+                     ┌────────────────────┐  ┌──────────────────────────────┐
+                     │  Eligibility engine │  │  FastAPI voice service        │
+                     │  (JavaScript)       │  │  ├─ speech recognition        │
+                     └─────────┬──────────┘  │  ├─ translation               │
+                               │             │  ├─ conversation & extraction │
+                               ▼             │  ├─ eligibility engine (Py)   │
+                     ┌────────────────────┐  │  └─ speech synthesis          │
+                     │    PostgreSQL       │◀─┴──────────────────────────────┘
+                     │ schemes · locations │
+                     │ users · audit log   │
+                     └────────────────────┘
 ```
 
-## Database modes
-- **Permanent (recommended for production):** set `DATABASE_URL` to any PostgreSQL 14+.
-- **Bundled (zero-cost preview):** if `DATABASE_URL` is not set, the app starts its own private PostgreSQL inside the server (via `embedded-postgres`). It is fully isolated, but **all accounts and edits reset when the server restarts**, and a banner tells visitors so. Seed schemes reload automatically on every boot.
+| Layer | Tech |
+|---|---|
+| Web app | Node.js 22, Express, EJS, vanilla JS |
+| Voice UI | React 18, Vite, Web Speech API |
+| Voice service | Python, FastAPI, asyncpg, httpx |
+| Database | PostgreSQL (full-text search, JSONB rules, GIN indexes) |
+| Security | bcrypt, helmet CSP, express-rate-limit, server-side sessions |
+| Hosting | Render |
 
-## Environment variables
+The JavaScript and Python eligibility engines are **parity-tested** against each other on hundreds of random profiles across every scheme, so web and voice always give the same answer.
+
+Optional upgrades are wired in and switch on with environment variables: **AI4Bharat** IndicConformer (speech recognition), IndicTrans2 (translation for 10 more Indian languages) and Indic Parler-TTS (natural Indic voices) via a GPU inference server, plus an LLM for free-form understanding. See [VOICE.md](VOICE.md) for architecture, costs and rollout steps.
+
+## 🚀 Run it locally
+
+```bash
+git clone https://github.com/oindreela04/HaqSetu.git
+cd HaqSetu
+npm install                 # also builds the voice UI and installs the Python voice deps
+npm start                   # http://localhost:3000
+```
+
+No database? No problem — without `DATABASE_URL` HaqSetu starts its own private PostgreSQL automatically (data resets on restart). For anything permanent, point it at a real one:
+
+```bash
+export DATABASE_URL=postgres://user:pass@localhost:5432/haqsetu
+npm start
+```
+
+Run the tests:
+
+```bash
+npm test               # web app: auth, matching, location rules, admin, privacy
+npm run test:voice     # voice service: engine parity, language extraction, conversations
+```
+
+### Configuration
+
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | PostgreSQL connection string (required) |
-| `SESSION_SECRET` | Long random string (required in production) |
-| `NODE_ENV` | `production` for secure cookies |
-| `ADMIN_EMAILS` | Comma-separated emails that become admins when they register/start |
-| `SITE_URL` | Public URL used in email links |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | Email delivery (verification & password reset) |
-| `ANTHROPIC_API_KEY` | Optional: enables the simple-language explainer |
-| `SHOW_UNVERIFIED` | `false` to show only reviewer-verified schemes publicly |
+| `DATABASE_URL` | PostgreSQL connection string (recommended for production) |
+| `SESSION_SECRET` | Long random string — **required** in production |
+| `ADMIN_EMAILS` | Comma-separated emails that get admin access when they sign up |
+| `SITE_URL` | Public URL, used in email links |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` | Email delivery for verification and password reset |
+| `SHOW_UNVERIFIED` | Set `false` to show only reviewer-verified schemes |
+| `AI4B_ASR_URL`, `AI4B_TRANSLATE_URL`, `AI4B_TTS_URL` | Optional AI4Bharat model endpoints for the voice assistant |
+| `ANTHROPIC_API_KEY` | Optional LLM for free-form voice understanding and plain-language explanations |
 
-## Keeping the catalogue current
-Schemes live in `data/schemes.js`. When a new government scheme is added or a rule changes there and the change is pushed, the next deploy inserts new schemes and refreshes existing seed records automatically — except records an admin has edited, which are never overwritten. A weekly scheduled research task proposes additions from official sources (PIB, myScheme, ministry and state portals) as commits; every addition arrives as *awaiting verification*.
+## 🗂️ Project structure
 
-## Data integrity
-Seed schemes were compiled on 14 Nov 2026 from official portals and recent reporting and are marked **awaiting verification** until a reviewer confirms each one against the official notification. Imports can never arrive as verified, and editing a verified record sends it back to the review queue.
+```
+src/            Express app, routes, eligibility engine, security, seeding
+views/          EJS templates (citizen pages + admin console)
+public/         CSS and browser scripts
+voice/          FastAPI voice service (providers, dialogue, Python engine, tests)
+voice-ui/       React voice interface
+data/           Scheme catalogue and all-India location data
+test/           Web app integration tests
+```
 
-HaqSetu is an independent information service, not a government website.
+## 🛣️ Roadmap
+
+- [ ] Reviewer verification of the full catalogue
+- [ ] More state and district schemes — every state and UT
+- [ ] AI4Bharat models live for Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese and Urdu
+- [ ] SMS / WhatsApp deadline reminders for saved schemes
+- [ ] Offline-friendly PWA for low-connectivity areas
+- [ ] Assisted mode for CSC operators and community volunteers
+
+## 🤝 Contributing
+
+Spotted an outdated scheme, a missing district, or a wrong rule? Use **"Report incorrect information"** on the scheme page, or open an issue with a link to the official notification. Pull requests that add schemes must cite an official government source.
+
+## ⚠️ Disclaimer
+
+HaqSetu is an independent public-interest information service. It is **not** a government website and is not affiliated with any government body. Eligibility results are indicative; the relevant government department makes every final decision. Always apply through official portals — government schemes are free to apply for.
+
+## 📄 License
+
+[MIT](LICENSE) © 2026 Oindreela Saha
+
+<div align="center">
+
+**If HaqSetu helped you or someone you know, share it — every share is someone who might finally claim what's theirs.** 🌉
+
+</div>

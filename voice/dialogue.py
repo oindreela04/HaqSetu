@@ -273,8 +273,9 @@ async def turn(s: Session, text: str) -> dict:
     text = (text or "").strip()[:1000]
     L = s.lang
     LT = L if L in i18n.TEMPLATED_LANGS else "en"
-    s.history.append({"role": "user", "text": text})
-    s.history = s.history[-20:]
+    if text:
+        s.history.append({"role": "user", "text": text})
+        s.history = s.history[-20:]
     out: dict = {"session_id": s.id, "lang": L, "results": None, "question_field": None, "action": None, "updates": None}
 
     if not text:
