@@ -16,4 +16,5 @@ const PORT = Number(process.env.PORT || 3000);
   require('./voiceService').start();
   const { createApp } = require('./app');
   createApp().listen(PORT, () => console.log(`HaqSetu listening on :${PORT}`));
+  require('./keepAwake').start();
 })();
