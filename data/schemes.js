@@ -343,10 +343,11 @@ module.exports = [
     beneficiary_categories: ['entrepreneur', 'women', 'sc_st'], tags: ['loan', 'women entrepreneur', 'SC/ST'],
     eligibility_text: 'SC/ST and/or women entrepreneurs aged 18+ setting up a greenfield (first-time) enterprise; not a defaulter.',
     rules: { all: [R.age(18, null), R.any(R.female(), R.in('social_category', ['sc', 'st'], 'Belongs to SC / ST'))] },
-    benefits: 'Composite loan between ₹10 lakh and ₹1 crore covering up to 85% of project cost.', benefit_amount: '₹10 lakh – ₹1 crore',
+    benefits: 'Composite loan (working capital and term loan) or term loan above ₹10 lakh and up to ₹1 crore, covering up to 85% of the project cost. Loans are backed by a credit guarantee covering 85% of the loan amount.', benefit_amount: '₹10 lakh – ₹1 crore',
     documents: ['ID & address proof', 'Caste certificate (SC/ST)', 'Project report', 'Business address proof'],
     application_process: 'Apply through the Stand-Up Mitra portal or directly at a bank branch.', application_mode: 'Online / Bank',
-    official_url: 'https://www.standupmitra.in', apply_url: 'https://www.standupmitra.in', source_url: 'https://www.standupmitra.in', source_reference: 'standupmitra.in', ...common,
+    deadline_note: 'The Union Cabinet extended the scheme on 11 November 2026 for five years, up to 31 March 2031.',
+    official_url: 'https://www.standupmitra.in', apply_url: 'https://www.standupmitra.in', source_url: 'https://www.pmindia.gov.in/en/news_updates/cabinet-approves-continuation-of-stand-up-india-scheme/', source_reference: 'Cabinet approves Continuation of Stand-Up India Scheme, PMO India, 11 Nov 2026; standupmitra.in', ...common,
   },
 
   // ───────────────────────── CENTRAL: Students ─────────────────────────
